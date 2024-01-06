@@ -1,7 +1,7 @@
 .login-main {
   display: flex;
   flex-direction: column;
-  width: 34.375rem;
+  max-width: 34.375rem;
   height: 25.5rem;
   padding: 0 2rem;
   position: relative;
