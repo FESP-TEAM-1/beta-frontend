@@ -215,7 +215,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles["profile-section-form"]} style={{ transform: `scale(${zoom})` }}>
+    <form onSubmit={handleSubmit} className={styles["profile-section-form"]} style={{ zoom: zoom }}>
       <div className={styles["profile-section-form-group"]}>
         <InputField required type="text" value={data.login_id} readOnly>
           아이디
