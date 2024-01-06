@@ -36,3 +36,15 @@
     position: absolute;
   }
 }
+
+@media (max-width: 375px) {
+  .title-hidden {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .title-hidden {
+    font-size: 0.8rem;
+  }
+}

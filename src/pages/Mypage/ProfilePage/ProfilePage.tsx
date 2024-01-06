@@ -8,6 +8,7 @@ import { isEmailCheck } from "@/utils/emailCheck";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { ProfileBodyType } from "@/types/SignupBodyType";
 import { getUserProfile, postSignupAPI, putProfileUpdate } from "@/apis";
+import { useHandleWidthResize } from "@/hooks";
 import styles from "./ProfilePage.module.css";
 
 interface BirthdateGenderType {
@@ -25,6 +26,7 @@ interface idPasswordCheck {
 const cx = classNames.bind(styles);
 
 const ProfilePage = () => {
+  const [zoom, setZoom] = useState(1);
   const { userState } = useLoginStore();
   const [password, setPassword] = useState<idPasswordCheck>({ value: "", isConfirm: false });
   const [checkPassword, setCheckPassword] = useState<idPasswordCheck>({ value: "", isConfirm: false });
@@ -50,6 +52,8 @@ const ProfilePage = () => {
     queryKey: ["userProfile"],
     queryFn: () => getUserProfile(userState.login_id),
   });
+
+  useHandleWidthResize(625, setZoom);
 
   useEffect(() => {
     if (data) {
@@ -211,7 +215,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles["profile-section-form"]}>
+    <form onSubmit={handleSubmit} className={styles["profile-section-form"]} style={{ transform: `scale(${zoom})` }}>
       <div className={styles["profile-section-form-group"]}>
         <InputField required type="text" value={data.login_id} readOnly>
           아이디
