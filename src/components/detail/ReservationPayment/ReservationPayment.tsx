@@ -1,22 +1,20 @@
 import { useEffect, useRef } from "react";
-import { PaymentWidgetInstance, loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
+import { useParams } from "react-router-dom";
+import { queryClient } from "@/main";
 import { useQuery } from "@tanstack/react-query";
+import { PaymentWidgetInstance, loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
-import { AgencyReservationInfoType, MemberType } from "@/types";
+import { MemberType, ShowReservationInfoType } from "@/types";
 import "./style.css";
 
 const selector = "#payment-widget";
 const clientKey = import.meta.env.VITE_APP_TOSS_PAYMENTS_CLIENT_KEY as string;
 const customerKey = nanoid();
 
-interface PropsType {
-  showInfo: AgencyReservationInfoType;
-  userInfo: MemberType;
-}
-
-const ReservationPayment: React.FC<PropsType> = ({ showInfo, userInfo }) => {
-  const { price, title } = showInfo;
-  const { user_name, user_email, phone_number } = userInfo;
+const ReservationPayment: React.FC = () => {
+  const { id: showId } = useParams();
+  const { price, title } = queryClient.getQueryData<ShowReservationInfoType>(["reservationData", showId])!;
+  const { user_name, user_email, phone_number } = queryClient.getQueryData<MemberType>(["userInfo"])!;
 
   const { data: paymentWidget } = usePaymentWidget(clientKey, customerKey);
   const paymentMethodsWidgetRef = useRef<ReturnType<PaymentWidgetInstance["renderPaymentMethods"]> | null>(null);

@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { queryClient } from "@/main";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Button, Carousel, Modal, UserAccessModal } from "@/components/common";
 import { NavBar } from "@/components/layouts";
 import { LikeButton, ReservationModal, SubMenuSection } from "@/components/detail";
+import { useLike } from "@/hooks";
 import { useLoginStore } from "@/stores/useLoginStore";
-import { useShowInfoStore } from "@/stores/useShowInfoStore";
 import { useModalStore } from "@/stores/useModalStore";
-import { AgencyReservationInfoType, ShowType } from "@/types";
-import { getShowInfo, getShowReservationInfo, deleteLike, postLike } from "@/apis";
+import { getShowInfo, getShowReservationInfo } from "@/apis";
 import { isNotUser } from "@/utils";
 import styles from "./DetaiPage.module.css";
 
@@ -20,55 +17,33 @@ const submenuList = [
 ];
 
 const DetailPage = () => {
+  const { id: showId } = useParams();
+  const { likeMutate, deleteLikeMutate } = useLike(showId!);
   const {
     userState: { user_role },
   } = useLoginStore();
-
   const { openModal, setOpenModal } = useModalStore();
-  const { id: showId } = useParams();
-  const { setShowInfo } = useShowInfoStore();
-  const [agencyReservationInfo, setAgencyReservationInfo] = useState<AgencyReservationInfoType | null>(null);
 
   const {
-    status,
     data: infoData,
+    status,
     error,
   } = useQuery({
     queryKey: ["infoData", showId],
     queryFn: () => getShowInfo(showId!),
   });
 
-  const { mutate: likeMutate } = useMutation({
-    mutationFn: async () => {
-      if (showId && infoData?.user_liked) {
-        return await deleteLike(showId);
-      }
-      if (showId && !infoData?.user_liked) {
-        return await postLike(showId);
-      }
-    },
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ["infoData", showId] });
-      const oldData = queryClient.getQueryData<ShowType>(["infoData", showId]);
-      queryClient.setQueryData(["infoData", showId], {
-        ...oldData,
-        user_liked: oldData?.user_liked ? 0 : 1,
-      });
-      return { oldData };
-    },
-    onError: (_error, _variables, context) => {
-      queryClient.setQueryData(["infoData", showId], { ...context?.oldData });
-    },
+  const { data: reservationData } = useQuery({
+    queryKey: ["reservationData", showId],
+    queryFn: () => getShowReservationInfo(showId!),
+    enabled: !!infoData?.is_reservation,
   });
-
-  useEffect(() => {
-    infoData && setShowInfo(infoData);
-  }, [infoData]);
 
   if (status === "pending") return <h1>loading...</h1>;
   if (status === "error") return <h1>{error.message}</h1>;
 
-  const subImgs = (infoData.sub_images_url && Object.values(JSON.parse(infoData.sub_images_url))) || [];
+  const subImgs = infoData.sub_images_url ? Object.values(JSON.parse(infoData.sub_images_url)) : [];
+  const images = [infoData.main_image_url, ...subImgs];
 
   const handleLikeButtonClick = () => {
     if (isNotUser(user_role)) {
@@ -76,10 +51,19 @@ const DetailPage = () => {
       return;
     }
 
-    likeMutate();
+    if (infoData?.user_liked) {
+      deleteLikeMutate();
+    } else if (!infoData?.user_liked) {
+      likeMutate();
+    }
   };
 
   const handleReservationButtonClick = async () => {
+    if (reservationData?.method === "google") {
+      window.open(reservationData.google_form_url!, "_blank");
+      return;
+    }
+
     if (isNotUser(user_role)) {
       setOpenModal({ state: true, type: "guestAccess" });
       return;
@@ -89,14 +73,7 @@ const DetailPage = () => {
       return;
     }
 
-    const data = await getShowReservationInfo(showId!);
-    const { method, google_form_url, ...rest } = data;
-
-    if (method === "google" && google_form_url) window.open(google_form_url, "_blank");
-    else {
-      setAgencyReservationInfo(rest);
-      setOpenModal({ state: true, type: "reservation" });
-    }
+    setOpenModal({ state: true, type: "reservation" });
   };
 
   return (
@@ -104,7 +81,7 @@ const DetailPage = () => {
       <NavBar />
       <main>
         <Carousel index={0}>
-          {[infoData.main_image_url, ...subImgs].map((img, index) => (
+          {images.map((img, index) => (
             <div key={index}>
               <img src={import.meta.env.VITE_APP_IMAGE_DOMAIN + img} className={styles["slider__img"]} />
             </div>
@@ -117,9 +94,9 @@ const DetailPage = () => {
               예매하기
             </Button>
           )}
-          {openModal.state && openModal.type === "reservation" && agencyReservationInfo && (
+          {openModal.state && openModal.type === "reservation" && (
             <Modal title={infoData.title} width={"600px"}>
-              <ReservationModal agencyReservationInfo={agencyReservationInfo} />
+              <ReservationModal />
             </Modal>
           )}
         </div>
