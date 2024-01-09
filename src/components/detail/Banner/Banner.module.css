@@ -7,13 +7,3 @@
   aspect-ratio: 3/4;
   object-fit: contain;
 }
-
-.btn-group {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
-}
-
-.btn-group button {
-  width: fit-content;
-}

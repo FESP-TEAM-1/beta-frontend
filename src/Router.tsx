@@ -21,6 +21,7 @@ import {
   AdminReservationManagePage,
 } from "@/pages";
 import { InfoSection, ReviewSection } from "@/components/detail";
+import { NavBar } from "./components/layouts";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +44,12 @@ const router = createBrowserRouter([
       },
       {
         path: "/detail/:id",
-        element: <DetailPage />,
+        element: (
+          <>
+            <NavBar />
+            <DetailPage />
+          </>
+        ),
         children: [
           {
             index: true,
