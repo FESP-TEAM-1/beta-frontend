@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { base64ToBytes, bytesToBase64, convertUrlToFile, getResizedImgFiles, convertArrayToObject, reduceImageSize } from "@/utils";
 import { DateInputType, DateWithTimeObj, ShowFormResultType, ShowFormType, ShowResFormType } from "@/types";
 import useInputs from "@/hooks/useInputs";
-import { deleteShow, getShowInfo, getShowReservationInfo, putShow, postShow } from "@/apis";
+import { deleteAdminShow, getShow, getShowReservationInfo, putShow, postShow } from "@/apis";
 import { Button, DatePicker, DeleteButton, Editor, InputField, RadioButtonGroup, TagInput } from "@/components/common";
 import { Postcode, ReservationForm } from "@/components/mypage";
 import ImgUploadIcon from "@/assets/ImgUploadIcon.svg?react";
@@ -108,7 +108,7 @@ const PostCRUDPage = () => {
     error,
   } = useQuery({
     queryKey: ["showInfoData", showId],
-    queryFn: () => getShowInfo(showId),
+    queryFn: () => getShow(showId),
     enabled: !!showId,
   });
 
@@ -139,7 +139,7 @@ const PostCRUDPage = () => {
 
   // 게시글 삭제 DELETE
   const { mutate: deleteMutate } = useMutation({
-    mutationFn: () => deleteShow(showId),
+    mutationFn: () => deleteAdminShow(showId),
     onSuccess: (data) => {
       if (data) {
         toast.success("게시글 삭제 완료");

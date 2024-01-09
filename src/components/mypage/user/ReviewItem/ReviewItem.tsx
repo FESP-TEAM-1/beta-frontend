@@ -5,13 +5,13 @@ import { DeleteButton } from "@/components/common";
 import getElapsedTime from "@/utils/getElapsedTime";
 import isWithinOneDay from "@/utils/isWithinOneDay";
 import { ReviewType } from "@/types";
-import { deleteReview } from "@/apis";
+import { deleteUserReview } from "@/apis";
 import { queryClient } from "@/main";
 import styles from "./ReviewItem.module.css";
 
 const ReviewItem: React.FC<ReviewType> = (item) => {
   const { mutate: deleteMutate } = useMutation({
-    mutationFn: (review: { review_id: number; show_id: number }) => deleteReview(review),
+    mutationFn: (review: { review_id: number; show_id: number }) => deleteUserReview(review),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["userReviewList"],

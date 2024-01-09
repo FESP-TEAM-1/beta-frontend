@@ -8,7 +8,7 @@ import IconEllipsisVertical from "@/assets/icon-ellipsis-vertical.png";
 import { ReviewDeleteParamType, ReviewType } from "@/types";
 import { useLoginStore } from "@/stores/useLoginStore";
 import getElapsedTime from "@/utils/getElapsedTime";
-import { deleteReview } from "@/apis";
+import { deleteUserReview } from "@/apis";
 import styles from "./ReviewItem.module.css";
 
 interface PropsType {
@@ -25,7 +25,7 @@ const ReviewItem: React.FC<PropsType> = ({ item, clickedReviewId, setClickedRevi
   } = useLoginStore();
 
   const { mutate: deleteMutate } = useMutation({
-    mutationFn: (review: ReviewDeleteParamType) => deleteReview(review),
+    mutationFn: (review: ReviewDeleteParamType) => deleteUserReview(review),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["reviewData", show_id],

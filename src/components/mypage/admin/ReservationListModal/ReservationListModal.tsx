@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { SelectBox } from "@/components/common";
-import { UserReservation } from "@/apis/getAdminReservationDetail";
+import { UserReservation } from "@/apis/reservation/getAdminReservationDetail";
 import { getAdminReservationDetail } from "@/apis/";
 import classNames from "classnames/bind";
 import styles from "./ReservationListModal.module.css";

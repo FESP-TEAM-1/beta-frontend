@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MypageNavBar } from "@/components/layouts";
 import { useLoginStore } from "@/stores/useLoginStore";
-import { patchUserLogout } from "@/apis/patchUserLogout";
+import { patchMemberLogout } from "@/apis";
 import MenuIcon from "@/assets/menu.svg?react";
 import NavbarCloseIcon from "@/assets/navbar-close.svg?react";
 import classNames from "classnames/bind";
@@ -33,7 +33,7 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
-    const res = patchUserLogout();
+    const res = patchMemberLogout();
     if ((await res).ok) {
       setUserState({ isLogin: false, login_id: "", user_name: "", user_role: "" });
       navigate("/");

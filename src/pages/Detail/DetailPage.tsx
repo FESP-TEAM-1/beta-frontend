@@ -10,7 +10,7 @@ import { useLoginStore } from "@/stores/useLoginStore";
 import { useShowInfoStore } from "@/stores/useShowInfoStore";
 import { useModalStore } from "@/stores/useModalStore";
 import { AgencyReservationInfoType, ShowType } from "@/types";
-import { getShowInfo, getShowReservationInfo, deleteLike, postLike } from "@/apis";
+import { getShow, getShowReservationInfo, deleteLike, postLike } from "@/apis";
 import { isNotUser } from "@/utils";
 import styles from "./DetaiPage.module.css";
 
@@ -35,7 +35,7 @@ const DetailPage = () => {
     error,
   } = useQuery({
     queryKey: ["infoData", showId],
-    queryFn: () => getShowInfo(showId!),
+    queryFn: () => getShow(showId!),
   });
 
   const { mutate: likeMutate } = useMutation({

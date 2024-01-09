@@ -4,7 +4,7 @@ import classNames from "classnames/bind";
 import { toast } from "react-toastify";
 import { SignForm, Button, InputField, InputFieldGroup, Timer } from "@/components/common";
 import { isPasswordCheck, isPasswordDoubleCheck, isEmailCheck } from "@/utils";
-import { getSignUserInfo, postSignupAPI } from "@/apis";
+import { getDuplicateIdCheck, postSignup } from "@/apis";
 import { SignupBodyType } from "@/types/SignupBodyType";
 import betaLogo from "@/assets/beta-logo.png";
 import styles from "./SignupPage.module.css";
@@ -108,7 +108,7 @@ const SignupPage = () => {
       body["univ_name"] = univName;
     }
 
-    const { isSuccess, message } = await postSignupAPI(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/signup`, body);
+    const { isSuccess, message } = await postSignup(`/api/signup`, body);
     if (isSuccess) {
       navigate("/login");
     } else {
@@ -125,7 +125,7 @@ const SignupPage = () => {
   // 아이디 중복확인
   const handleCheckId = async () => {
     // db 조회 후 중복확인
-    const data = await getSignUserInfo(id.value);
+    const data = await getDuplicateIdCheck(id.value);
 
     if (id.value === "") {
       toast.error("아이디를 입력해주세요.");
@@ -163,11 +163,8 @@ const SignupPage = () => {
       setIsStop(false);
       const body: { user_email: string; univName?: string } = { user_email: fullEmail };
       if (userType === "admin") body["univName"] = univName;
-      const endPoint =
-        userType === "user"
-          ? `${import.meta.env.VITE_APP_API_ENDPOINT}/api/send-email`
-          : `${import.meta.env.VITE_APP_API_ENDPOINT}/api/send-univ-email`;
-      const { isSuccess, message } = await postSignupAPI(endPoint, body);
+      const endPoint = userType === "user" ? `/api/send-email` : `/api/send-univ-email`;
+      const { isSuccess, message } = await postSignup(endPoint, body);
       if (isSuccess) {
         toast.update(toastId, {
           render: "이메일이 전송되었습니다.",
@@ -205,11 +202,8 @@ const SignupPage = () => {
     const fullEmail = userType === "admin" ? univEmail : `${email.email1}@${email.email2}`;
     const body: { user_email: string; code: string; univName?: string } = { user_email: fullEmail, code: emailCertValue };
     if (userType === "admin") body["univName"] = univName;
-    const endPoint =
-      userType === "user"
-        ? `${import.meta.env.VITE_APP_API_ENDPOINT}/api/verify-code`
-        : `${import.meta.env.VITE_APP_API_ENDPOINT}/api/verify-univ-code`;
-    const { isSuccess, message } = await postSignupAPI(endPoint, body);
+    const endPoint = userType === "user" ? `/api/verify-code` : `/api/verify-univ-code`;
+    const { isSuccess, message } = await postSignup(endPoint, body);
     if (isSuccess) {
       toast.update(toastId, {
         render: "인증되었습니다.",

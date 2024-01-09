@@ -5,9 +5,8 @@ import { toast } from "react-toastify";
 import { InputField, InputFieldGroup, Button, Timer } from "@/components/common";
 import { isPasswordCheck, isPasswordDoubleCheck } from "@/utils/passwordCheck";
 import { isEmailCheck } from "@/utils/emailCheck";
-import { useLoginStore } from "@/stores/useLoginStore";
 import { ProfileBodyType } from "@/types/SignupBodyType";
-import { getUserProfile, postSignupAPI, putProfileUpdate } from "@/apis";
+import { getMemberInfo, postSignup, putProfile } from "@/apis";
 import styles from "./ProfilePage.module.css";
 import { useResizeZoom } from "@/hooks";
 
@@ -26,7 +25,6 @@ interface idPasswordCheck {
 const cx = classNames.bind(styles);
 
 const ProfilePage = () => {
-  const { userState } = useLoginStore();
   const [password, setPassword] = useState<idPasswordCheck>({ value: "", isConfirm: false });
   const [checkPassword, setCheckPassword] = useState<idPasswordCheck>({ value: "", isConfirm: false });
   const [name, setName] = useState("");
@@ -51,7 +49,7 @@ const ProfilePage = () => {
 
   const { data, status, error } = useQuery({
     queryKey: ["userProfile"],
-    queryFn: () => getUserProfile(userState.login_id),
+    queryFn: () => getMemberInfo(),
   });
 
   useEffect(() => {
@@ -124,7 +122,7 @@ const ProfilePage = () => {
       user_role: data.user_role as "user" | "admin",
     };
 
-    const { isSuccess, message } = await putProfileUpdate(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/updateMember`, body);
+    const { isSuccess, message } = await putProfile(`/api/updateMember`, body);
     if (isSuccess) {
       toast.success("회원정보 수정 완료");
     } else {
@@ -152,8 +150,8 @@ const ProfilePage = () => {
         setIsCodeCheck(false);
         setIsStop(false);
         const body: { user_email: string } = { user_email: fullEmail };
-        const endPoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/send-email`;
-        const { isSuccess, message } = await postSignupAPI(endPoint, body);
+        const endPoint = `/api/send-email`;
+        const { isSuccess, message } = await postSignup(endPoint, body);
         if (isSuccess) {
           toast.update(toastId, {
             render: "이메일 전송 완료 인증번호를 입력해주세요.",
@@ -191,8 +189,8 @@ const ProfilePage = () => {
     const toastId = toast.loading("이메일을 전송중입니다.");
     const fullEmail = `${email.email1}@${email.email2}`;
     const body: { user_email: string; code: string } = { user_email: fullEmail, code: emailCertValue };
-    const endPoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/verify-code`;
-    const { isSuccess, message } = await postSignupAPI(endPoint, body);
+    const endPoint = `/api/verify-code`;
+    const { isSuccess, message } = await postSignup(endPoint, body);
     if (isSuccess) {
       toast.update(toastId, {
         render: "인증 완료",

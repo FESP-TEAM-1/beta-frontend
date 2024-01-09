@@ -12,6 +12,7 @@ import "./global.css";
 export const queryClient = new QueryClient();
 
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = import.meta.env.VITE_APP_API_ENDPOINT;
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>

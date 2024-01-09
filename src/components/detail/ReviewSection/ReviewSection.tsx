@@ -4,7 +4,7 @@ import { Button, NullField } from "@/components/common";
 import { ReviewItem, ReviewForm } from "@/components/detail";
 import { useModalStore } from "@/stores/useModalStore";
 import { useLoginStore } from "@/stores/useLoginStore";
-import { getReviews } from "@/apis";
+import { getReviewList } from "@/apis";
 import styles from "./ReviewSection.module.css";
 import { useState } from "react";
 
@@ -24,7 +24,7 @@ const ReviewSection = () => {
     error,
   } = useQuery({
     queryKey: ["reviewData", show_id],
-    queryFn: () => (show_id ? getReviews(show_id) : []),
+    queryFn: () => (show_id ? getReviewList(show_id) : []),
     select: (item) => ({ reviews: item.slice(0, page * 5), totalCounts: item.length }),
   });
 

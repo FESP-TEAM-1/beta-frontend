@@ -5,7 +5,7 @@ import { StoryCard, StoryUploadModal, StoryViewModal, StorySectionSkeleton } fro
 import { useModalStore } from "@/stores/useModalStore";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { useCarouselDragStore } from "@/stores/useCarouselDragStore";
-import { getStories } from "@/apis";
+import { getStoryList } from "@/apis";
 import { isNotUser } from "@/utils";
 import styles from "./StorySection.module.css";
 
@@ -19,7 +19,7 @@ const StorySection = () => {
 
   const { data, status, error } = useQuery({
     queryKey: ["storyData"],
-    queryFn: async () => await getStories(),
+    queryFn: async () => await getStoryList(),
     select: (item) => item.slice(0, 7),
   });
 

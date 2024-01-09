@@ -1,6 +1,6 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { BasicCard, NullField } from "@/components/common";
-import { getShows } from "@/apis";
+import { getShowList } from "@/apis";
 import { ShowFilterRequestType } from "@/types";
 import styles from "./ExhibitionListSection.module.css";
 
@@ -12,7 +12,7 @@ const ExhibitionListSection: React.FC<PropsType> = ({ filterRequest }) => {
   const { start_date, end_date, location, progress } = filterRequest;
   const { data, status, error } = useQuery({
     queryKey: ["exhibitionData", filterRequest],
-    queryFn: async () => await getShows("exhibition", start_date, end_date, location, progress),
+    queryFn: async () => await getShowList("exhibition", start_date, end_date, location, progress),
     placeholderData: keepPreviousData,
   });
 
