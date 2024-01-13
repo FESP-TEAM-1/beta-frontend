@@ -17,11 +17,11 @@ import {
   StoryManagePage,
   UserReservationManagePage,
   PostManagePage,
-  PostUpdatePage,
-  PostUploadPage,
+  PostCRUDPage,
   AdminReservationManagePage,
 } from "@/pages";
 import { InfoSection, ReviewSection } from "@/components/detail";
+import { NavBar } from "./components/layouts";
 
 const router = createBrowserRouter([
   {
@@ -44,7 +44,12 @@ const router = createBrowserRouter([
       },
       {
         path: "/detail/:id",
-        element: <DetailPage />,
+        element: (
+          <>
+            <NavBar />
+            <DetailPage />
+          </>
+        ),
         children: [
           {
             index: true,
@@ -87,11 +92,11 @@ const router = createBrowserRouter([
               },
               {
                 path: "post/upload",
-                element: <PostUploadPage />,
+                element: <PostCRUDPage />,
               },
               {
                 path: "post/update",
-                element: <PostUpdatePage />,
+                element: <PostCRUDPage />,
               },
             ],
           },

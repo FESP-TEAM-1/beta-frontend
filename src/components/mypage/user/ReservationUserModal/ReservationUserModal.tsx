@@ -1,8 +1,8 @@
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import LocationMap from "@/components/detail/InfoSection/LocationMap";
-import { deleteCancelShow } from "@/apis";
-import { useModalStore } from "@/stores/useModalStore";
+import { deleteReservation } from "@/apis";
+import { useModalStore } from "@/stores";
 import { queryClient } from "@/main";
 import styles from "./ReservationUserModal.module.css";
 
@@ -17,7 +17,7 @@ const copyClipBoard: onCopyFn = async (text: string) => {
   }
 };
 
-const base64ToBytes = (base64: string): Uint8Array => {
+const convertBase64ToBytes = (base64: string): Uint8Array => {
   try {
     const binString = window.atob(base64);
     return Uint8Array.from(binString, (c) => c.codePointAt(0) ?? 0);
@@ -46,12 +46,12 @@ const ReservationUserModal = ({ ...item }) => {
     notice,
   } = item.item;
 
-  const decodedContent = notice ? new TextDecoder().decode(base64ToBytes(notice)) : null;
+  const decodedContent = notice ? new TextDecoder().decode(convertBase64ToBytes(notice)) : null;
   const positionJson = position && JSON.parse(position);
 
   const { mutate: deleteMutate } = useMutation({
     mutationFn: ({ id, show_times_id, orderId }: { id: number; show_times_id: number; orderId: string }) =>
-      deleteCancelShow(id, show_times_id, orderId),
+      deleteReservation(id, show_times_id, orderId),
     onSuccess: (data) => {
       if (data && data.ok) {
         toast.success("예매가 취소되었습니다.");

@@ -2,16 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { DeleteButton } from "@/components/common";
-import getElapsedTime from "@/utils/getElapsedTime";
-import isWithinOneDay from "@/utils/isWithinOneDay";
+import { getElapsedTime, checkIsWithinOneDay } from "@/utils";
 import { ReviewType } from "@/types";
-import { deleteReview } from "@/apis";
+import { deleteUserReview } from "@/apis";
 import { queryClient } from "@/main";
 import styles from "./ReviewItem.module.css";
 
 const ReviewItem: React.FC<ReviewType> = (item) => {
   const { mutate: deleteMutate } = useMutation({
-    mutationFn: (review: { review_id: number; show_id: number }) => deleteReview(review),
+    mutationFn: (review: { review_id: number; show_id: number }) => deleteUserReview(review),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["userReviewList"],
@@ -24,7 +23,7 @@ const ReviewItem: React.FC<ReviewType> = (item) => {
   };
 
   const elapsedTime = getElapsedTime(item.created_at);
-  const isNew = isWithinOneDay(item.created_at);
+  const isNew = checkIsWithinOneDay(item.created_at);
 
   return (
     <div className={styles["reviewItem-container"]}>

@@ -5,10 +5,12 @@ interface useCarouselDragStoreType {
   setIsDragging: (state: boolean) => void;
 }
 
-export const useCarouselDragStore = create<useCarouselDragStoreType>((set) => ({
+const useCarouselDragStore = create<useCarouselDragStoreType>((set) => ({
   isDragging: false,
   setIsDragging: (state) =>
     set(() => ({
       isDragging: state,
     })),
 }));
+
+export default useCarouselDragStore;

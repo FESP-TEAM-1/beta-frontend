@@ -10,7 +10,7 @@ interface OpenModal {
   type: string;
 }
 
-export const useModalStore = create<useModalStoreType>((set) => ({
+const useModalStore = create<useModalStoreType>((set) => ({
   openModal: { state: false, type: "" },
   setOpenModal: ({ state, type = "" }) =>
     set(() => ({
@@ -20,3 +20,5 @@ export const useModalStore = create<useModalStoreType>((set) => ({
       },
     })),
 }));
+
+export default useModalStore;

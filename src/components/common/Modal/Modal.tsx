@@ -1,6 +1,6 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import { useModalStore } from "@/stores/useModalStore";
+import { useModalStore } from "@/stores";
 import { usePreventScroll } from "@/hooks";
 import classNames from "classnames/bind";
 import styles from "./Modal.module.css";

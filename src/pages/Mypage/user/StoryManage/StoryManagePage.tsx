@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getStoryUser } from "@/apis";
+import { getUserStoryList } from "@/apis";
 import { StoryItem } from "@/components/mypage";
 import { NullField } from "@/components/common";
 import styles from "./StoryManagePage.module.css";
@@ -11,7 +11,7 @@ const StoryManagePage = () => {
     data: userStoryList,
   } = useQuery({
     queryKey: ["userStoryList"],
-    queryFn: () => getStoryUser(),
+    queryFn: () => getUserStoryList(),
   });
 
   if (status === "pending") return <h1>loading...</h1>;

@@ -1,63 +1,48 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { queryClient } from "@/main";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { Button, CheckBox, InputField, InputFieldGroup } from "@/components/common";
-import useInputs from "@/hooks/useInputs";
-import { useModalStore } from "@/stores/useModalStore";
-import { useReservationFormStore } from "@/stores/useReservationFormStore";
-import { UserReservationInputsType, AgencyReservationInfoType, MemberType, UserReservationFormType } from "@/types";
+import { useInputs } from "@/hooks";
+import { useModalStore, useReservationFormStore } from "@/stores";
+import { UserReservationInputsType, MemberType, UserReservationFormType, ShowReservationInfoType } from "@/types";
+import { convertBase64ToBytes } from "@/utils";
+import { postReservation } from "@/apis";
+import RadioStyles from "@/components/common/RadioButtonGroup/RadioButtonGroup.module.css";
 import styles from "./ReservationForm.module.css";
 import classNames from "classnames/bind";
-import RadioStyles from "@/components/common/RadioButtonGroup/RadioButtonGroup.module.css";
-import { postReservation } from "@/apis";
-import { base64ToBytes } from "@/utils";
 
 const cx = classNames.bind(RadioStyles);
 
 interface PropsType {
-  showInfo: AgencyReservationInfoType;
-  userInfo: MemberType;
   goToPaymentStep: () => void;
 }
 
-const ReservationForm: React.FC<PropsType> = ({ showInfo, userInfo, goToPaymentStep }) => {
+const ReservationForm: React.FC<PropsType> = ({ goToPaymentStep }) => {
+  const { id: showId } = useParams();
   const { setOpenModal } = useModalStore();
-  const { location, price, date_time, notice } = showInfo;
 
-  const { user_name, user_email, phone_number } = userInfo;
+  const { location, price, date_time, notice, show_id } = queryClient.getQueryData<ShowReservationInfoType>(["reservationData", showId])!;
+  const { user_name, user_email, phone_number } = queryClient.getQueryData<MemberType>(["userInfo"])!;
+
   const [email1, email2] = user_email.split("@");
   const [phone1, phone2, phone3] = phone_number.split("-");
-  const decodedNotice = new TextDecoder().decode(base64ToBytes(notice));
-
-  const [btnDisabled, setBtnDisabled] = useState(false);
-
+  const decodedNotice = new TextDecoder().decode(convertBase64ToBytes(notice));
   const [form, onChange] = useInputs<UserReservationInputsType>({
     show_times_id: -1,
     is_receive_email: false,
   });
+
+  const [submitBtnDisabled, setSubmitBtnDisabled] = useState(false);
+
   const { setReservationForm } = useReservationFormStore();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const result: UserReservationFormType = {
-      show_id: showInfo.show_id,
-      show_times_id: form.show_times_id,
-      is_receive_email: form.is_receive_email ? 1 : 0,
-    } as const;
-
-    if (price !== 0) {
-      setReservationForm(result);
-      goToPaymentStep();
-      return;
-    }
-    if (form.show_times_id === -1) {
-      toast.warn("회차를 선택해주세요");
-      return;
-    }
-    setBtnDisabled(true);
+  const submitFreeReservation = async (reservationParam: UserReservationFormType) => {
+    setSubmitBtnDisabled(true);
     const toastId = toast.loading("예매 진행 중...");
     try {
-      await postReservation(result);
+      await postReservation(reservationParam);
 
       toast.update(toastId, {
         render: (
@@ -70,7 +55,6 @@ const ReservationForm: React.FC<PropsType> = ({ showInfo, userInfo, goToPaymentS
         isLoading: false,
         autoClose: 2000,
       });
-      setBtnDisabled(false);
       setOpenModal({ state: false, type: "" });
     } catch (err) {
       toast.update(toastId, {
@@ -80,8 +64,31 @@ const ReservationForm: React.FC<PropsType> = ({ showInfo, userInfo, goToPaymentS
         autoClose: 2000,
       });
     } finally {
-      setBtnDisabled(false);
+      setSubmitBtnDisabled(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formParam: UserReservationFormType = {
+      show_id,
+      show_times_id: form.show_times_id,
+      is_receive_email: form.is_receive_email ? 1 : 0,
+    } as const;
+
+    if (form.show_times_id === -1) {
+      toast.warn("회차를 선택해주세요");
+      return;
+    }
+
+    setReservationForm(formParam);
+    if (price !== 0) {
+      goToPaymentStep();
+      return;
+    }
+
+    submitFreeReservation(formParam);
   };
 
   return (
@@ -137,7 +144,7 @@ const ReservationForm: React.FC<PropsType> = ({ showInfo, userInfo, goToPaymentS
         </div>
       </form>
 
-      <Button type="submit" form="reservation" disabled={btnDisabled}>
+      <Button type="submit" form="reservation" disabled={submitBtnDisabled}>
         예매하기
       </Button>
     </>

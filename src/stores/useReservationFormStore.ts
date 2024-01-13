@@ -7,7 +7,7 @@ interface useReservationFormStoreType {
   setReservationForm: (item: UserReservationFormType) => void;
 }
 
-export const useReservationFormStore = create(
+const useReservationFormStore = create(
   persist<useReservationFormStoreType>(
     (set) => ({
       reservationForm: null,
@@ -21,3 +21,5 @@ export const useReservationFormStore = create(
     },
   ),
 );
+
+export default useReservationFormStore;

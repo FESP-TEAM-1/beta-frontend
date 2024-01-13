@@ -4,9 +4,8 @@ import { queryClient } from "@/main";
 import { useColor } from "color-thief-react";
 import { toast } from "react-toastify";
 import { Button, TagInput } from "@/components/common";
-import reduceImageSize from "@/utils/reduceImageSize";
-import convertArrayToObject from "@/utils/convertArrayToObject";
-import { useModalStore } from "@/stores/useModalStore";
+import { reduceImageSize, convertArrayToObject } from "@/utils";
+import { useModalStore } from "@/stores";
 import { postStory } from "@/apis";
 import styles from "./StoryUploadModal.module.css";
 

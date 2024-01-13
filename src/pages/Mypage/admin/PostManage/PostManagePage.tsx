@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { useModalStore } from "@/stores/useModalStore";
-import { deleteReviewAdmin, getMyShowList, getReviews } from "@/apis";
-import getElapsedTime from "@/utils/getElapsedTime";
+import { useModalStore } from "@/stores";
+import { deleteAdminReview, getAdminShowList, getReviewList } from "@/apis";
+import { getElapsedTime } from "@/utils";
 import { Button, Modal, DeleteButton, NullField } from "@/components/common";
 import { ReviewDeleteParamType, ReviewType } from "@/types";
 import LikeIcon from "@/assets/like.svg?react";
@@ -27,7 +27,7 @@ const PostManagePage = () => {
     error: errorShowList,
   } = useQuery({
     queryKey: ["showList"],
-    queryFn: () => getMyShowList(),
+    queryFn: () => getAdminShowList(),
   });
 
   // 후기 리스트를 가져오는 쿼리 (조건부로 호출)
@@ -38,13 +38,13 @@ const PostManagePage = () => {
     refetch: refetchReviews,
   } = useQuery({
     queryKey: ["reviewList", showId],
-    queryFn: () => getReviews(showId),
+    queryFn: () => getReviewList(showId),
     enabled: !!showId,
   });
 
   // 후기 삭제를 위한 뮤테이션
   const { mutate: deleteMutate } = useMutation({
-    mutationFn: (review: ReviewDeleteParamType) => deleteReviewAdmin(review),
+    mutationFn: (review: ReviewDeleteParamType) => deleteAdminReview(review),
     onSuccess: () => refetchReviews(),
     onError: () => toast.error("댓글 삭제 실패"),
   });

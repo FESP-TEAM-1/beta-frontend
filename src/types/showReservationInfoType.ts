@@ -18,8 +18,6 @@ export interface ShowReservationInfoType {
   title: string;
 }
 
-export type AgencyReservationInfoType = Omit<ShowReservationInfoType, "method" | "google_form_url">;
-
 interface ShowDateTime {
   id: number;
   show_id: number;

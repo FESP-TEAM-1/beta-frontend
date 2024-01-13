@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/common";
 import { CalendarFilters, CalendarList } from "..";
-import getTodayStringDate from "@/utils/getTodayStringDate";
+import { getTodayStringDate } from "@/utils";
 import styles from "./CalendarSection.module.css";
 
 const CalendarSection = () => {

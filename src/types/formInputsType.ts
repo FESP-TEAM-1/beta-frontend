@@ -2,5 +2,5 @@
 import { EmailValues, PhoneValues } from "@/components/common/InputFieldGroup/InputFieldGroupType";
 
 export interface FormInputs {
-  [key: string]: PhoneValues | EmailValues | number | boolean | string | object;
+  [key: string]: PhoneValues | EmailValues | number | boolean | string | object | null;
 }

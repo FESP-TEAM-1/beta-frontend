@@ -6,8 +6,7 @@ import "./DatePicker.css";
 import styles from "./DatePicker.module.css";
 import CalendarIcon from "@/assets/icon-calendar.svg?react";
 import { DateInputType } from "@/types";
-import formattingDate from "@/utils/formattingDate";
-import formattingTime from "@/utils/formattingTime";
+import { formatDate, formatTime } from "@/utils";
 
 export interface DatePickerRef {
   clearDatePicker: () => void;
@@ -37,8 +36,8 @@ const DatePicker: React.ForwardRefRenderFunction<DatePickerRef, PropsType> = (
   const handleChangeDateWithTimeInput = (name: string, value: Date | null) => {
     if (value) {
       const dateObject = new Date(value);
-      const date = formattingDate(dateObject);
-      const time = formattingTime(dateObject);
+      const date = formatDate(dateObject);
+      const time = formatTime(dateObject);
       const event: DateInputType = { target: { name, value: { date, time } } };
       onChange(event);
       return;
@@ -50,7 +49,7 @@ const DatePicker: React.ForwardRefRenderFunction<DatePickerRef, PropsType> = (
   const handleChangePeriodInput = (name: string, value: Date | null) => {
     if (value) {
       const dateObject = new Date(value);
-      const date = formattingDate(dateObject);
+      const date = formatDate(dateObject);
       const event: DateInputType = { target: { name, value: date } };
       onChange(event);
       return;

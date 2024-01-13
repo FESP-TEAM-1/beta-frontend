@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import classNames from "classnames/bind";
-import { useLoginStore } from "@/stores/useLoginStore";
+import { useLoginStore } from "@/stores";
 import styles from "./MypageNavBar.module.css";
 
 const cx = classNames.bind(styles);

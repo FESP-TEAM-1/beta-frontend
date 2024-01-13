@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { getTxtColorByBgColor } from "@/utils/";
+import { getTxtColorByBgColor } from "@/utils";
 import { ShowType } from "@/types";
 import styles from "./TicketCard.module.css";
 import classNames from "classnames/bind";

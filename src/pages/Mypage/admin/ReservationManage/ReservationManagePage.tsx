@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useModalStore } from "@/stores/useModalStore";
+import { useModalStore } from "@/stores";
 import { Button, Modal, NullField } from "@/components/common";
 import { ReservationListModal } from "@/components/mypage";
 import { getAdminReservationList } from "@/apis/";

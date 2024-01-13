@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { BasicCard } from "@/components/common";
-import { getShows } from "@/apis";
+import { getShowList } from "@/apis";
 import styles from "./CalendarList.module.css";
 import { ShowType } from "@/types";
 import { CalendarSectionSkeleton } from "..";
@@ -13,7 +13,7 @@ interface PropsType {
 const CalendarList: React.FC<PropsType> = ({ filters }) => {
   const { status, data, error } = useQuery({
     queryKey: ["showDatas", filters],
-    queryFn: async () => await getShows(filters.category, filters.date, filters.date),
+    queryFn: async () => await getShowList(filters.category, filters.date, filters.date),
     select: (item) => item.slice(0, 7),
     placeholderData: keepPreviousData,
   });

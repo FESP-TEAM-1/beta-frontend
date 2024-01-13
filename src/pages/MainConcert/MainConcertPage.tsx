@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavBar } from "@/components/layouts";
 import { Filters } from "@/components/common";
 import { ConcertListSection } from "@/components/mainConcert";
-import getTodayStringDate from "@/utils/getTodayStringDate";
+import { getTodayStringDate } from "@/utils";
 import { ShowFilterRequestType } from "@/types";
 
 const MainConcertPage = () => {

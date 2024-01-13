@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { useReservationFormStore } from "@/stores/useReservationFormStore";
+import { useReservationFormStore } from "@/stores";
 import CheckBoxIconSrc from "@/assets/checkbox-payment.svg";
 import { postReservation } from "@/apis";
 

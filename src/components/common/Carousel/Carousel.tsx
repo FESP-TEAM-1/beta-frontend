@@ -1,6 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
-import { useCarouselDragStore } from "@/stores/useCarouselDragStore";
+import { useCarouselDragStore } from "@/stores";
 import nextArrow from "@/assets/next-arrow.png";
 import prevArrow from "@/assets/prev-arrow.png";
 import "./slick.css";

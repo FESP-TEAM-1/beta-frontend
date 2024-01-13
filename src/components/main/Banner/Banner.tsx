@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { Carousel } from "@/components/common";
-import { useCarouselDragStore } from "@/stores/useCarouselDragStore";
+import { useCarouselDragStore } from "@/stores";
 import { getBannerImages } from "@/apis";
 import styles from "./Banner.module.css";
 

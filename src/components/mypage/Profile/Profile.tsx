@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import { InputField, InputFieldGroup, Button, Timer } from "@/components/common";
 import styles from "./Profile.module.css";
-import { isPasswordCheck, isPasswordDoubleCheck } from "@/utils/passwordCheck";
-import { isEmailCheck } from "@/utils/emailCheck";
+import { checkPassword, checkPasswordMatch } from "@/utils";
+import { checkEmail } from "@/utils";
 
 const item = {
   user_id: "test",
@@ -31,7 +31,7 @@ const cx = classNames.bind(styles);
 
 const Profile = () => {
   const [password, setPassword] = useState<idPasswordCheck>({ value: "", isConfirm: false });
-  const [checkPassword, setCheckPassword] = useState<idPasswordCheck>({ value: "", isConfirm: false });
+  const [matchPassword, setMatchPassword] = useState<idPasswordCheck>({ value: "", isConfirm: false });
   const [name, setName] = useState("");
   const [phone, setPhone] = useState({ phone1: "", phone2: "", phone3: "" });
   const [birthGender, setBirthGender] = useState<BirthdateGenderType>({
@@ -73,18 +73,18 @@ const Profile = () => {
 
   // 비밀번호
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword({ ...password, value: e.currentTarget.value, isConfirm: isPasswordCheck(e.currentTarget.value) });
+    setPassword({ ...password, value: e.currentTarget.value, isConfirm: checkPassword(e.currentTarget.value) });
   };
 
   // 비밀번호 확인
   const handleCheckPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckPassword({ ...checkPassword, value: e.currentTarget.value, isConfirm: isPasswordDoubleCheck(password.value, e.currentTarget.value) });
+    setMatchPassword({ ...checkPassword, value: e.currentTarget.value, isConfirm: checkPasswordMatch(password.value, e.currentTarget.value) });
   };
 
   // 이메일 전송
   const handleSendEmail = () => {
     const fullEmail = `${email.email1}@${email.email2}`;
-    if (isEmailCheck(fullEmail)) {
+    if (checkEmail(fullEmail)) {
       if (fullEmail !== item.user_email) {
         // 인증번호 이메일 발송
         console.log("이메일 전송");
@@ -121,9 +121,9 @@ const Profile = () => {
         type="password"
         name="password"
         placeholder="비밀번호를 다시 입력해주세요."
-        value={checkPassword.value}
+        value={matchPassword.value}
         onChange={handleCheckPassword}
-        isConfirm={checkPassword.isConfirm}
+        isConfirm={matchPassword.isConfirm}
       >
         새 비밀번호 확인
       </InputField>

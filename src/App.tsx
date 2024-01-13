@@ -1,12 +1,13 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Header } from "./components/layouts";
-import { useModalStore } from "./stores/useModalStore";
+import { useModalStore } from "./stores";
 import PrivateRoute from "./PrivateRoute";
 
 function App() {
   const location = useLocation();
   const { setOpenModal } = useModalStore();
+  const isPrivateRoute = location.pathname.startsWith("/mypage");
 
   useEffect(() => {
     if (location.state?.from !== "detail") window.scrollTo(0, 0);
@@ -16,7 +17,7 @@ function App() {
   return (
     <>
       {location.pathname !== "/signup" && location.pathname !== "/login" && <Header />}
-      <PrivateRoute />
+      {isPrivateRoute ? <PrivateRoute /> : <Outlet />}
     </>
   );
 }

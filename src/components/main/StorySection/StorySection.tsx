@@ -2,11 +2,9 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Carousel, Modal, UserAccessModal } from "@/components/common";
 import { StoryCard, StoryUploadModal, StoryViewModal, StorySectionSkeleton } from "@/components/main";
-import { useModalStore } from "@/stores/useModalStore";
-import { useLoginStore } from "@/stores/useLoginStore";
-import { useCarouselDragStore } from "@/stores/useCarouselDragStore";
-import { getStories } from "@/apis";
-import { isNotUser } from "@/utils";
+import { useModalStore, useLoginStore, useCarouselDragStore } from "@/stores";
+import { getStoryList } from "@/apis";
+import { checkIsNotUser } from "@/utils";
 import styles from "./StorySection.module.css";
 
 const StorySection = () => {
@@ -19,12 +17,12 @@ const StorySection = () => {
 
   const { data, status, error } = useQuery({
     queryKey: ["storyData"],
-    queryFn: async () => await getStories(),
+    queryFn: async () => await getStoryList(),
     select: (item) => item.slice(0, 7),
   });
 
   const handleClickUploadBtn = () => {
-    if (isNotUser(user_role)) {
+    if (checkIsNotUser(user_role)) {
       setOpenModal({ state: true, type: "guestAccess" });
       return;
     }
@@ -82,11 +80,13 @@ const StorySection = () => {
           {status === "pending" && <StorySectionSkeleton />}
           {status === "error" && <>{error.message}</>}
 
-          <Carousel index={1}>
-            {data?.map((item, index) => (
-              <StoryCard key={item.id} item={item} onClick={handleClickStoryCard(index)} />
-            ))}
-          </Carousel>
+          {data && (
+            <Carousel index={1}>
+              {data.map((item, index) => (
+                <StoryCard key={item.id} item={item} onClick={handleClickStoryCard(index)} />
+              ))}
+            </Carousel>
+          )}
         </div>
       </section>
     </>

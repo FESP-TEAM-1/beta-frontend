@@ -1,4 +1,4 @@
-import { useReservationFormStore } from "@/stores/useReservationFormStore";
+import { useReservationFormStore } from "@/stores";
 import { Link, useSearchParams } from "react-router-dom";
 
 const PayFailPage = () => {

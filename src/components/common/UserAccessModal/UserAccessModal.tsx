@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
-import { useLoginStore } from "@/stores/useLoginStore";
+import { Link, useLocation } from "react-router-dom";
+import { useLoginStore } from "@/stores";
 import styles from "./UserAccessModal.module.css";
 
 const UserAccessModal = () => {
+  const location = useLocation();
   const {
     userState: { user_role },
   } = useLoginStore();
@@ -17,7 +18,9 @@ const UserAccessModal = () => {
           </div>
           <div className={styles["guest-access__login"]}>
             <p>이미 가입한 아이디가 있다면,</p>
-            <Link to="/login">로그인</Link>
+            <Link to="/login" state={{ from: location }} replace>
+              로그인
+            </Link>
           </div>
         </>
       )}
@@ -30,7 +33,9 @@ const UserAccessModal = () => {
           </div>
           <div className={styles["guest-access__login"]}>
             <p>이미 가입한 아이디가 있다면,</p>
-            <Link to="/login">로그인</Link>
+            <Link to="/login" state={{ from: location }} replace>
+              로그인
+            </Link>
           </div>
         </>
       )}

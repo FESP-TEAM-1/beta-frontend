@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Carousel } from "@/components/common";
 import { StoryViewModalCard } from "..";
-import { getStories } from "@/apis";
+import { getStoryList } from "@/apis";
 import styles from "./StoryViewModal.module.css";
 
 interface PropsType {
@@ -11,7 +11,7 @@ interface PropsType {
 const StoryViewModal: React.FC<PropsType> = ({ initialSlide }) => {
   const { data, status, error } = useQuery({
     queryKey: ["storyData"],
-    queryFn: async () => await getStories(),
+    queryFn: async () => await getStoryList(),
   });
 
   if (status === "pending") return <>loading...</>;

@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { SignForm, Button, InputField } from "@/components/common";
-import { patchUserLogin } from "@/apis/patchUserLogin";
-import { useLoginStore } from "@/stores/useLoginStore";
+import { patchMemberLogin } from "@/apis";
+import { useLoginStore } from "@/stores";
+import { useResizeZoom } from "@/hooks";
 import betaLogo from "@/assets/beta-logo.png";
 import styles from "./LoginPage.module.css";
 
@@ -15,17 +16,17 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
 
+  const { zoom } = useResizeZoom(625);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await patchUserLogin(id, password, userType);
+    const res = await patchMemberLogin(id, password, userType);
 
     if (res.isSuccess) {
       setUserState(res.userLoginInfo);
       if (state?.from) {
-        navigate("/", { replace: true });
-        // navigate(`${state.from.pathname}`, { replace: true });
+        navigate(`${state.from.pathname}`, { replace: true });
       } else {
-        // TODO: 로그인 버튼을 눌렀을 때, 로그인 이전 페이지로 이동하게 해야 함
         navigate("/", { replace: true });
       }
     } else {
@@ -38,7 +39,7 @@ const LoginPage = () => {
   };
 
   return (
-    <main className={styles["login-main"]}>
+    <main className={styles["login-main"]} style={{ zoom: zoom }}>
       <div className={styles["logo-div"]}>
         <img src={betaLogo} alt="로고 이미지" className={styles["logo-img"]} onClick={moveToMain} />
       </div>

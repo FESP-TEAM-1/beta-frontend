@@ -13,7 +13,7 @@ interface useLoginStoreState {
   setUserState: (newState: UserState) => void;
 }
 
-export const useLoginStore = create(
+const useLoginStore = create(
   persist<useLoginStoreState>(
     (set) => ({
       userState: {
@@ -29,3 +29,5 @@ export const useLoginStore = create(
     },
   ),
 );
+
+export default useLoginStore;

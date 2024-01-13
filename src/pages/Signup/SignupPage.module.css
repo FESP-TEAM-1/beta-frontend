@@ -1,7 +1,7 @@
 .sign-main {
   display: flex;
   flex-direction: column;
-  width: 34.375rem;
+  max-width: 34.375rem;
   height: 100%;
   padding: 0 2rem;
   position: relative;

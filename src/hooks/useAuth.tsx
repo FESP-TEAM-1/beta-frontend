@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { verifyTokenAPI } from "@/apis/getVerifyToken";
-import { useLoginStore } from "@/stores/useLoginStore";
+import { useLoginStore } from "@/stores";
+import getVerifyToken from "@/apis/user/getVerifyToken";
 
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -11,7 +11,7 @@ const useAuth = () => {
 
   const verifyToken = async () => {
     try {
-      const res = await verifyTokenAPI();
+      const res = await getVerifyToken();
       setUserState(res);
     } catch (error) {
       console.error(error);

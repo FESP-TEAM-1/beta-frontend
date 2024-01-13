@@ -1,8 +1,7 @@
 import React from "react";
 import { FilterButton } from "@/components/common";
 import { CalendarDateButton } from "..";
-import getStringDate from "@/utils/getStringDate";
-import getTodayStringDate from "@/utils/getTodayStringDate";
+import { getStringDate, getTodayStringDate } from "@/utils";
 import classNames from "classnames/bind";
 import styles from "./CalendarFilters.module.css";
 
