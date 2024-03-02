@@ -32,4 +32,16 @@ export default defineConfig({
   resolve: {
     alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          const module = id.split("node_modules/").pop().split("/")[0];
+          if (["@ckeditor", "react-datepicker"].includes(module)) {
+            return `${module}`;
+          }
+        },
+      },
+    },
+  },
 });
