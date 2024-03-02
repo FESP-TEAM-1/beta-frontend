@@ -33,6 +33,7 @@ export default defineConfig({
     alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
   },
   build: {
+    chunkSizeWarningLimit: 800,
     rollupOptions: {
       output: {
         manualChunks: (id) => {
