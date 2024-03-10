@@ -36,12 +36,12 @@ export default defineConfig({
     alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
   },
   build: {
-    chunkSizeWarningLimit: 800,
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         manualChunks: (id) => {
           const module = id.split("node_modules/").pop().split("/")[0];
-          if (["@ckeditor", "react-datepicker"].includes(module)) {
+          if (["react-dom"].includes(module)) {
             return `${module}`;
           }
         },
