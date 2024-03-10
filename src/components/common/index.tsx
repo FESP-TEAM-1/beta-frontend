@@ -16,7 +16,7 @@ import CheckBox from "./CheckBox/CheckBox";
 import RadioButtonGroup from "./RadioButtonGroup/RadioButtonGroup";
 import RadioButtonGroupRHF from "./RadioButtonGroup/RadioButtonGroupRHF";
 import DatePickerRHF from "./DatePicker/DatePickerRHF";
-import Editor from "./Editor/Editor";
+import EditorRHF from "./Editor/EditorRHF";
 import DeleteButton from "./DeleteButton/DeleteButton";
 import TicketCard from "./TicketCard/TicketCard";
 import UserAccessModal from "./UserAccessModal/UserAccessModal";
@@ -42,7 +42,7 @@ export {
   RadioButtonGroup,
   RadioButtonGroupRHF,
   DatePickerRHF,
-  Editor,
+  EditorRHF as Editor,
   DeleteButton,
   TicketCard,
   UserAccessModal,

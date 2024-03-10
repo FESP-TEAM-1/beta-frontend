@@ -1,8 +1,7 @@
 import React from "react";
-import { Controller, useFormContext } from "react-hook-form";
 import "./Editor.css";
 
-const LazyCKEditor = React.lazy(async () => {
+const Editor = React.lazy(async () => {
   const [
     { CKEditor },
     { default: ClassicEditor },
@@ -56,25 +55,5 @@ const LazyCKEditor = React.lazy(async () => {
     ),
   };
 });
-
-interface PropsType {
-  name: string;
-}
-
-const Editor: React.FC<PropsType> = ({ name }) => {
-  const { control, setValue } = useFormContext();
-
-  return (
-    <Controller
-      control={control}
-      name={name}
-      render={({ field: { value } }) => (
-        <React.Suspense fallback="로딩 중...">
-          <LazyCKEditor value={value} handleValue={(data: unknown) => setValue(name, data)} />
-        </React.Suspense>
-      )}
-    />
-  );
-};
 
 export default Editor;
