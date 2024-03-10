@@ -1,7 +1,6 @@
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
-
-const Editor = React.lazy(() => import('./Editor'));
+import Editor from "./Editor";
 
 interface PropsType {
   name: string;
