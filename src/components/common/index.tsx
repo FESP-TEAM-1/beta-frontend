@@ -15,7 +15,6 @@ import Filters from "./Filters/Filters";
 import CheckBox from "./CheckBox/CheckBox";
 import RadioButtonGroup from "./RadioButtonGroup/RadioButtonGroup";
 import RadioButtonGroupRHF from "./RadioButtonGroup/RadioButtonGroupRHF";
-import DatePicker from "./DatePicker/DatePicker";
 import DatePickerRHF from "./DatePicker/DatePickerRHF";
 import Editor from "./Editor/Editor";
 import DeleteButton from "./DeleteButton/DeleteButton";
@@ -42,7 +41,6 @@ export {
   CheckBox,
   RadioButtonGroup,
   RadioButtonGroupRHF,
-  DatePicker,
   DatePickerRHF,
   Editor,
   DeleteButton,
