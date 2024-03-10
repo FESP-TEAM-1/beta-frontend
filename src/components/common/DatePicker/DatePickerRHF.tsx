@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import DatePicker from "./DatePicker";
+
+const DatePicker = React.lazy(() => import('./DatePicker').then(module => ({ default: module.default })));
 
 interface PropsType {
   type: "period" | "dateWithTime";
