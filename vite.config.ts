@@ -29,7 +29,22 @@ export default defineConfig({
       },
     },
   },
+  preview: {
+    port: 3000,
+  },
   resolve: {
     alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          const module = id.split("node_modules/").pop().split("/")[0];
+          if (["react-dom"].includes(module)) {
+            return `${module}`;
+          }
+        },
+      },
+    },
   },
 });
