@@ -5,6 +5,7 @@ import { deleteReservation } from "@/apis";
 import { useModalStore } from "@/stores";
 import { useQueryClient } from "@tanstack/react-query";
 import styles from "./ReservationUserModal.module.css";
+import { sanitizeHtml } from "@/utils";
 
 type onCopyFn = (text: string) => void;
 
@@ -48,6 +49,7 @@ const ReservationUserModal = ({ ...item }) => {
   } = item.item;
 
   const decodedContent = notice ? new TextDecoder().decode(convertBase64ToBytes(notice)) : null;
+  const sanitizeContent = decodedContent && { __html: sanitizeHtml(decodedContent) };
   const positionJson = position && JSON.parse(position);
 
   const { mutate: deleteMutate } = useMutation({
@@ -93,10 +95,10 @@ const ReservationUserModal = ({ ...item }) => {
         </ul>
       </section>
 
-      {decodedContent && (
+      {sanitizeContent && (
         <section className={styles["show_notice"]}>
           <h4>유의 사항</h4>
-          <pre className={styles["show_notice__content"]} dangerouslySetInnerHTML={{ __html: decodedContent }}></pre>
+          <pre className={styles["show_notice__content"]} dangerouslySetInnerHTML={sanitizeContent}></pre>
         </section>
       )}
 

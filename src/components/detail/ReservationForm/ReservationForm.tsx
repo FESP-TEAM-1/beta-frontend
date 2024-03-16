@@ -7,7 +7,7 @@ import { Button, CheckBox, InputField, InputFieldGroup } from "@/components/comm
 import { useInputs, useReservationAlert } from "@/hooks";
 import { useLoginStore, useModalStore, useReservationFormStore } from "@/stores";
 import { UserReservationInputsType, MemberType, UserReservationFormType, ShowReservationInfoType } from "@/types";
-import { convertBase64ToBytes } from "@/utils";
+import { convertBase64ToBytes, sanitizeHtml } from "@/utils";
 import { postPayVerification, postReservation } from "@/apis";
 import RadioStyles from "@/components/common/RadioButtonGroup/RadioButtonGroup.module.css";
 import styles from "./ReservationForm.module.css";
@@ -36,6 +36,7 @@ const ReservationForm: React.FC<PropsType> = ({ goToPaymentStep }) => {
   const [email1, email2] = user_email.split("@");
   const [phone1, phone2, phone3] = phone_number.split("-");
   const decodedNotice = new TextDecoder().decode(convertBase64ToBytes(notice));
+  const sanitizeContent = { __html: sanitizeHtml(decodedNotice) };
   const [form, onChange] = useInputs<UserReservationInputsType>({
     show_times_id: -1,
     is_receive_email: false,
@@ -113,7 +114,7 @@ const ReservationForm: React.FC<PropsType> = ({ goToPaymentStep }) => {
 
       <div className={styles["show-notice"]}>
         <h2>티켓 예매 시 유의 사항</h2>
-        <div dangerouslySetInnerHTML={{ __html: decodedNotice }}></div>
+        <div dangerouslySetInnerHTML={sanitizeContent}></div>
       </div>
 
       <form id="reservation" onSubmit={handleSubmit}>

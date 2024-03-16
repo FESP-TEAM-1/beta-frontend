@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import LocationMap from "./LocationMap";
 import { ShowType } from "@/types";
 import { useLoginStore } from "@/stores";
-import { convertBase64ToBytes } from "@/utils";
+import { convertBase64ToBytes, sanitizeHtml } from "@/utils";
 import styles from "./InfoSection.module.css";
 
 type onCopyFn = (text: string) => void;
@@ -42,6 +42,7 @@ const InfoSection = () => {
   const tags = rawTags ? Object.values<string>(JSON.parse(rawTags)) : [];
   const position = rawPosition && JSON.parse(rawPosition);
   const decodedContent = rawContent ? new TextDecoder().decode(convertBase64ToBytes(rawContent)) : null;
+  const sanitizeContent = decodedContent && { __html: sanitizeHtml(decodedContent) };
 
   return (
     <>
@@ -63,10 +64,10 @@ const InfoSection = () => {
           )}
         </section>
 
-        {decodedContent && (
+        {sanitizeContent && (
           <section className={styles["info-description"]}>
             <h3>소개</h3>
-            <pre className={styles["info-description__content"]} dangerouslySetInnerHTML={{ __html: decodedContent }}></pre>
+            <pre className={styles["info-description__content"]} dangerouslySetInnerHTML={sanitizeContent}></pre>
           </section>
         )}
 

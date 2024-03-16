@@ -25,6 +25,7 @@ import reduceImageSize from "./reduceImageSize";
 import setShowInfo from "./setShowInfo";
 import setShowResInfo from "./setShowResInfo";
 import validateShowForm from "./validateShowForm";
+import sanitizeHtml from "./sanitizeHtml";
 
 export {
   appendResultToFormData,
@@ -53,6 +54,7 @@ export {
   getMonths,
   getDays,
   reduceImageSize,
+  sanitizeHtml,
   setShowInfo,
   setShowResInfo,
   validateShowForm,
