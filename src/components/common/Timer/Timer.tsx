@@ -1,39 +1,43 @@
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useInterval } from "@/hooks";
 import styles from "./Timer.module.css";
 
 interface PropsType {
-  time: number;
-  setTime: React.Dispatch<React.SetStateAction<number>>;
+  initialTime: number;
   isStop?: boolean;
+  reset?: number;
+  onTimeEnd?: () => void; // 타이머가 끝났을 때 실행할 콜백 함수
 }
 
-const Timer: React.FC<PropsType> = ({ time, setTime, isStop }) => {
-  const getSeconds = (time: number): string => {
-    const seconds = time % 60;
-    return seconds < 10 ? `0${seconds}` : `${seconds}`;
-  };
+const Timer: React.FC<PropsType> = React.memo(({ initialTime, isStop, reset, onTimeEnd }) => {
+  const [time, setTime] = useState(initialTime);
+
+  useInterval(
+    () => {
+      if (time > 0 && !isStop) {
+        setTime((prev) => prev - 1);
+      } else if (time === 0) {
+        onTimeEnd && onTimeEnd();
+      }
+    },
+    isStop ? null : 1000,
+  );
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime((prev) => prev - 1);
-    }, 1000);
-
-    if (time <= 0 || isStop) {
-      clearInterval(timer);
+    if (reset) {
+      setTime(initialTime);
     }
-
-    return () => clearInterval(timer);
-  }, [time, isStop]);
+  }, [reset, initialTime]);
 
   return (
     <div className={styles["timer-container"]}>
       <div>
-        <span>{Math.floor(time / 60)}</span>
+        <span>{String(Math.floor(time / 60)).padStart(2, "0")}</span>
         <span> : </span>
-        <span>{getSeconds(time)}</span>
+        <span>{String(time % 60).padStart(2, "0")}</span>
       </div>
     </div>
   );
-};
+});
 
 export default Timer;

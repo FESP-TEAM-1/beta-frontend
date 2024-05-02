@@ -43,9 +43,10 @@ const SignupPage = () => {
   const [univName, setUnivName] = useState(""); // 학교 이름
 
   const [isEmailSend, setIsEmailSend] = useState(false);
-  const [time, setTime] = useState(180); // 3분
+  const [showInputField, setShowInputField] = useState(true); // 인증번호 필드
   const [isCodeCheck, setIsCodeCheck] = useState(false); // 인증번호 확인 여부
   const [isStop, setIsStop] = useState(false); // 타이머 정지
+  const [reset, setReset] = useState(0); // 타이머 리셋
 
   const navigate = useNavigate();
 
@@ -172,8 +173,9 @@ const SignupPage = () => {
           isLoading: false,
           autoClose: 2000,
         });
-        setTime(180);
+        setReset((prev) => prev + 1);
         setIsEmailSend(true);
+        setShowInputField(true);
       } else {
         toast.update(toastId, {
           render: message,
@@ -222,6 +224,11 @@ const SignupPage = () => {
       });
       return;
     }
+  };
+
+  // 타이머 종료
+  const handleTimeEnd = () => {
+    setShowInputField(false);
   };
 
   return (
@@ -302,7 +309,7 @@ const SignupPage = () => {
               </div>
             </>
           )}
-          {isEmailSend && time > 0 && (
+          {isEmailSend && showInputField && (
             <div className={cx("sign-section-form-group", "top-minus10")}>
               <InputField
                 required
@@ -318,7 +325,7 @@ const SignupPage = () => {
               <Button onClick={handleCertConfirm} disabled={isCodeCheck}>
                 확인
               </Button>
-              <Timer time={time} setTime={setTime} isStop={isStop} />
+              <Timer initialTime={180} isStop={isStop} reset={reset} onTimeEnd={handleTimeEnd} />
             </div>
           )}
 

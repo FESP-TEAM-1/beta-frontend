@@ -1,17 +1,16 @@
-import { NavBar } from "@/components/layouts";
-import { Banner, StorySection, CalendarSection } from "@/components/main";
+import { BannerSection, StorySection, CalendarSection } from "@/components/main";
 import "react-loading-skeleton/dist/skeleton.css";
+import { ErrorBoundary } from "react-error-boundary";
 
 const MainPage = () => {
   return (
-    <>
-      <NavBar />
-      <main>
-        <Banner />
+    <main>
+      <ErrorBoundary fallback={<div>에러페이지</div>}>
+        <BannerSection />
         <StorySection />
         <CalendarSection />
-      </main>
-    </>
+      </ErrorBoundary>
+    </main>
   );
 };
 

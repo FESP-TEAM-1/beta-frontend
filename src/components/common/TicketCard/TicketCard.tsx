@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import { getTxtColorByBgColor } from "@/utils";
 import { ShowType } from "@/types";
+import { useImgLazyLoading } from "@/hooks";
 import styles from "./TicketCard.module.css";
 import classNames from "classnames/bind";
 
@@ -12,11 +13,14 @@ interface PropsType {
 }
 
 const TicketCard: React.FC<PropsType> = ({ item }) => {
+  const imgRef = useRef<HTMLImageElement>(null);
+  useImgLazyLoading(imgRef);
+
   return (
     <article className={styles.card} style={{ backgroundColor: item.main_image_color || "" }}>
       <Link to={`/detail/${item.id}`}>
         <div className={styles["card__img-wrapper"]}>
-          <img src={`${import.meta.env.VITE_APP_IMAGE_DOMAIN}${item.main_image_url}`} alt="" />
+          <img ref={imgRef} data-src={`${import.meta.env.VITE_APP_IMAGE_DOMAIN}${item.main_image_url}`} alt="" />
         </div>
 
         <div className={styles["card__info"]} style={{ color: getTxtColorByBgColor(item.main_image_color) }}>

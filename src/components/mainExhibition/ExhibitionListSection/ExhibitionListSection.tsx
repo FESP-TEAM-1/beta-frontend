@@ -1,18 +1,14 @@
+import { useSearchParams } from "react-router-dom";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { BasicCard, NullField } from "@/components/common";
 import { getShowList } from "@/apis";
-import { ShowFilterRequestType } from "@/types";
 import styles from "./ExhibitionListSection.module.css";
 
-interface PropsType {
-  filterRequest: ShowFilterRequestType;
-}
-
-const ExhibitionListSection: React.FC<PropsType> = ({ filterRequest }) => {
-  const { start_date, end_date, location, progress } = filterRequest;
+const ExhibitionListSection: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const { data, status, error } = useQuery({
-    queryKey: ["exhibitionData", filterRequest],
-    queryFn: async () => await getShowList("exhibition", start_date, end_date, location, progress),
+    queryKey: ["exhibitionData", searchParams.toString()],
+    queryFn: async () => await getShowList("exhibition", searchParams.toString()),
     placeholderData: keepPreviousData,
   });
 
@@ -31,7 +27,7 @@ const ExhibitionListSection: React.FC<PropsType> = ({ filterRequest }) => {
           ))}
         </ul>
       ) : (
-        <NullField text1="조회한 날에 공연이 없습니다!" />
+        <NullField text1="조회한 날에 전시가 없습니다!" />
       )}
     </section>
   );

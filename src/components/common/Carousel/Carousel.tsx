@@ -1,8 +1,8 @@
-import React from "react";
-import Slider from "react-slick";
-import { useCarouselDragStore } from "@/stores";
+import React, { useMemo } from "react";
+import Slider, { Settings } from "react-slick";
 import nextArrow from "@/assets/next-arrow.png";
 import prevArrow from "@/assets/prev-arrow.png";
+import DummyBannerImage from "@/assets/dummy-banner-img.svg?react";
 import "./slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./Carousel.module.css";
@@ -10,7 +10,9 @@ import styles from "./Carousel.module.css";
 interface PropsType {
   index: number;
   initialSlide?: number;
+  dataLength?: number;
   children: React.ReactNode;
+  setIsDragging?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const renderCustomDots = (dots: never) => {
@@ -42,8 +44,9 @@ const PrevArrows = (props: { onClick?: () => void }) => {
   );
 };
 
-const settings = [
+const settings: Settings[] = [
   {
+    lazyLoad: "anticipated",
     dots: true,
     infinite: true,
     autoplay: true,
@@ -54,7 +57,7 @@ const settings = [
     swipeToSlide: true,
     responsive: [
       {
-        breakpoint: 500,
+        breakpoint: 450,
         settings: {
           slidesToShow: 1,
         },
@@ -65,19 +68,19 @@ const settings = [
   },
   {
     infinite: false,
-    slidesToShow: 4,
+    slidesToShow: 4.2,
     swipeToSlide: true,
     responsive: [
       {
         breakpoint: 760,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 3.2,
         },
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 2.2,
         },
       },
     ],
@@ -87,63 +90,36 @@ const settings = [
     centerMode: true,
     infinite: true,
     slidesToShow: 1,
-    speed: 500,
-    centerPadding: "10%",
-
-    nextArrow: <NextArrows />,
-    prevArrow: <PrevArrows />,
-    responsive: [
-      {
-        breakpoint: 500,
-        settings: {
-          centerPadding: "0",
-        },
-      },
-    ],
-  },
-  {
-    dots: true,
-    infinite: true,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    appendDots: (dots: never) => renderCustomDots(dots),
-    dotsClass: "dots",
-    slidesToShow: 3,
-    swipeToSlide: true,
-    responsive: [
-      {
-        breakpoint: 760,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 400,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
     nextArrow: <NextArrows />,
     prevArrow: <PrevArrows />,
   },
 ];
 
-const Carousel: React.FC<PropsType> = ({ index, initialSlide = 0, children }) => {
-  const { setIsDragging } = useCarouselDragStore();
+const Carousel: React.FC<PropsType> = ({ index, initialSlide = 0, children, setIsDragging, dataLength }) => {
+  const calculatedSettings = useMemo(() => {
+    if (index === 0 && dataLength! <= 2) {
+      return { ...settings[0], autoplay: false };
+    } else return settings[index];
+  }, [index, dataLength]);
 
   return (
     <Slider
-      {...settings[index]}
+      {...calculatedSettings}
       initialSlide={initialSlide}
       beforeChange={() => {
-        setIsDragging(true);
+        setIsDragging?.(true);
       }}
       afterChange={() => {
-        setIsDragging(false);
+        setIsDragging?.(false);
       }}
     >
       {children}
+      {dataLength === 1 && (
+        <div className={styles["dummy-image"]}>
+          <DummyBannerImage />
+          <p>게시물을 기다리고 있어요</p>
+        </div>
+      )}
     </Slider>
   );
 };

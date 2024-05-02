@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { queryClient } from "@/main";
+import { useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { ReviewEditForm } from "..";
 import EllipsisProfileImg from "@/assets/ellipsis-profile.svg?react";
@@ -18,6 +18,7 @@ interface PropsType {
 }
 
 const ReviewItem: React.FC<PropsType> = ({ item, clickedReviewId, setClickedReviewId }) => {
+  const queryClient = useQueryClient();
   const [isEditMode, setIsEditMode] = useState(false);
   const { id: show_id } = useParams();
   const {

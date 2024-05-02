@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { queryClient } from "@/main";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { LikeButton, ReservationModal } from "@/components/detail";
 import { Button, Modal, UserAccessModal } from "@/components/common";
@@ -10,6 +10,7 @@ import { checkIsNotUser } from "@/utils";
 import styles from "./ButtonGroup.module.css";
 
 const ButtonGroup = () => {
+  const queryClient = useQueryClient();
   const { id: showId } = useParams();
   const { likeMutate, deleteLikeMutate } = useLike(showId!);
   const {

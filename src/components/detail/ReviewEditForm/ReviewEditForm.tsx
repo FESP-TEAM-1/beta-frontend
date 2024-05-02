@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { queryClient } from "@/main";
+import { useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/common";
 import { patchReview } from "@/apis";
@@ -13,6 +13,7 @@ interface PropsType {
 }
 
 const ReviewEditForm: React.FC<PropsType> = ({ item, setIsEditMode }) => {
+  const queryClient = useQueryClient();
   const { id: show_id } = useParams();
   const [reviewInput, setReviewInput] = useState("");
 

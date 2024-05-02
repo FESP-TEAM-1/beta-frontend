@@ -1,18 +1,16 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { TicketCard, NullField } from "@/components/common/";
 import { getShowList } from "@/apis";
-import { ShowFilterRequestType } from "@/types";
 import styles from "./ConcertListSection.module.css";
+import { useSearchParams } from "react-router-dom";
 
-interface PropsType {
-  filterRequest: ShowFilterRequestType;
-}
+const ConcertListSection: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const queryString = searchParams.toString();
 
-const ConcertListSection: React.FC<PropsType> = ({ filterRequest }) => {
-  const { start_date, end_date, location, category, progress } = filterRequest;
   const { data, status, error } = useQuery({
-    queryKey: ["concertData", filterRequest],
-    queryFn: async () => await getShowList("concert", start_date, end_date, location, progress, category),
+    queryKey: ["concertData", queryString],
+    queryFn: async () => await getShowList("concert", queryString),
     placeholderData: keepPreviousData,
   });
 

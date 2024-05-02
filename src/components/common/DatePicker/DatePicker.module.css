@@ -6,16 +6,16 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem;
+  padding-right: 1.8rem;
   border: 1px solid var(--gray300-color);
   border-radius: 5px;
 }
 
 .calendar-input {
-  width: 80%;
+  width: 100%;
   border: none;
   padding: 0;
   font-size: 1rem;
-  padding-left: 0.5rem;
 }
 
 .calendar-input:focus {
@@ -25,6 +25,8 @@
 .calendar-input-wrap svg {
   height: 100%;
   width: fit-content;
+  flex-shrink: 0;
+  margin-right: 0.5rem;
 }
 
 .wave {

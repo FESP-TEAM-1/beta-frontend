@@ -1,0 +1,15 @@
+.button-logout,
+.button-mypage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 0.625rem;
+  word-break: keep-all;
+  transition: background-color 0.3s;
+}
+
+.button-logout:hover,
+.button-mypage:hover {
+  background-color: var(--gray100-color);
+}

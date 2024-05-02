@@ -6,7 +6,7 @@ interface ShowListResponse {
   data: ShowListItemType[];
 }
 
-interface ShowListItemType extends Omit<ShowType, "user_liked"> {
+export interface ShowListItemType extends Omit<ShowType, "user_liked"> {
   likes_count: number;
   reviews_count: number;
 }

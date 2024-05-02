@@ -1,4 +1,4 @@
-import React, { useState, SetStateAction } from "react";
+import React, { useState, SetStateAction, useEffect } from "react";
 import { BirthdateGenderValues, EmailValues, PhoneValues, PropsType } from "./InputFieldGroupType";
 import { getYears, getMonths, getDays } from "@/utils";
 import styles from "./InputFieldGroup.module.css";
@@ -37,8 +37,18 @@ const InputFieldGroup: React.FC<PropsType> = ({ type, values, setValues, userTyp
     }
   };
 
+  const emailOptions = ["gmail.com", "naver.com", "daum.net", "직접 입력"];
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [selectedDomain, setSelectedDomain] = useState("gmail.com");
+
+  useEffect(() => {
+    if (type === "email" && "email2" in values) {
+      const emailDomain = values.email2;
+      const newDomain = emailOptions.includes(emailDomain) ? emailDomain : "직접 입력";
+      setSelectedDomain(newDomain);
+      setIsReadOnly(newDomain !== "직접 입력");
+    }
+  }, [values, type]);
 
   switch (type) {
     case "phone":
@@ -124,8 +134,6 @@ const InputFieldGroup: React.FC<PropsType> = ({ type, values, setValues, userTyp
     }
 
     case "email": {
-      const emailOptions = ["gmail.com", "naver.com", "daum.net", "직접 입력"];
-
       const handleEmailDomainChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { value } = e.target;
         setSelectedDomain(value);

@@ -1,0 +1,56 @@
+.list-row-left {
+  text-align: start;
+}
+
+.list-row-right {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+@media (max-width: 520px) {
+  .list-row-left {
+    text-align: center;
+  }
+  .list-row-right {
+    flex-basis: auto;
+  }
+}
+
+.list-item__title {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.list-item__date {
+  color: var(--gray300-color);
+}
+
+.list-row-right button {
+  box-sizing: border-box;
+  font-size: 0.75rem;
+  width: fit-content;
+  word-break: keep-all;
+  padding: 0.8rem;
+  margin: auto;
+}
+
+svg.cmt-icon {
+  margin-right: 0.4rem;
+  height: 0.8rem;
+}
+
+.like-cnt {
+  display: flex;
+  align-items: center;
+}
+
+.like-cnt svg {
+  height: 0.8rem;
+  margin-right: 0.2rem;
+}
+
+.like-cnt svg path {
+  stroke: var(--gray400-color);
+}

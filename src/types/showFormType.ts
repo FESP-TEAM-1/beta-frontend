@@ -6,14 +6,14 @@ export interface ShowFormType extends FormInputs {
   title: string;
   univ: string;
   department: string;
-  // location: string;
+  location: string;
   location_detail: string | null;
   // main_image_color: string;
-  // start_date: string;
-  // end_date: string;
+  start_date: Date | null;
+  end_date: Date | null;
   // position: string;
-  // tags: string;
-  // content: string | null;
+  tags: string[];
+  content: string | null;
   is_reservation: string;
 }
 
@@ -22,21 +22,16 @@ export interface ShowResFormType extends FormInputs {
   google_form_url: string | null;
   price: number | null;
   head_count: number | null;
-  // date_time: string | null;
-  // notice: string | null;
+  date_time: string | null;
+  notice: string | null;
 }
 
-export interface ShowFormResultType extends ShowFormType, Omit<ShowResFormType, "price" | "head_count"> {
-  location: string;
+export interface ShowFormResultType extends Omit<ShowFormType, "start_date" | "end_date">, Omit<ShowResFormType, "price" | "head_count"> {
   main_image_color: string;
+  position: string;
   start_date: string;
   end_date: string;
-  position: string;
-  tags: string;
-  content: string | null;
   //
   price: string | null;
   head_count: string | null;
-  date_time: string | null;
-  notice: string | null;
 }

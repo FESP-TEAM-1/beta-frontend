@@ -27,51 +27,7 @@
   display: none;
 }
 
-.exhibition-list {
-  padding-top: 10px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13.125rem, 1fr));
-  gap: 2.5rem 1.25rem;
-  width: 100%;
-}
-
-.concert-list {
-  padding-top: 10px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(18.4375rem, 1fr));
-  gap: 2.5rem;
-  width: 100%;
-}
-
-.concert-list article {
-  aspect-ratio: 2/1;
-}
-
-.concert-list article h3 {
-  font-size: 1rem;
-}
-
-.concert-list article p {
-  font-size: 0.9rem;
-}
-
-.concert-list article p:last-child {
-  font-size: 0.7rem;
-}
-
-@media (max-width: 375px) {
-  .concert-list {
-    grid-template-columns: repeat(auto-fill, minmax(16.4375rem, 1fr));
-  }
-  .concert-list article > a > div:last-child {
-    zoom: 0.8;
-  }
-}
-
 @media (max-width: 320px) {
-  .concert-list article > a > div:last-child {
-    zoom: 0.7;
-  }
   .filter-row button {
     min-width: 4.625rem;
   }

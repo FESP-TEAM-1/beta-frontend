@@ -1,7 +1,12 @@
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useImgLazyLoading } from "@/hooks";
 import styles from "./ReservationItem.module.css";
 
 const ReservationItem = ({ ...args }) => {
+  const imgRef = useRef<HTMLImageElement>(null);
+  useImgLazyLoading(imgRef);
+
   const navigate = useNavigate();
   const { show_id, title, location, location_detail, main_image_url, date_time, modalOpen } = args;
 
@@ -13,8 +18,9 @@ const ReservationItem = ({ ...args }) => {
     <article className={styles["reservation-article"]}>
       <div className={styles["reservation-box"]}>
         <img
+          ref={imgRef}
           className={styles["reservation-img"]}
-          src={`${import.meta.env.VITE_APP_IMAGE_DOMAIN}${main_image_url}`}
+          data-src={`${import.meta.env.VITE_APP_IMAGE_DOMAIN}${main_image_url}`}
           alt="메인 이미지"
           onClick={moveToDetail}
         />

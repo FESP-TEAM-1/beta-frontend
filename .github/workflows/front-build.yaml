@@ -1,0 +1,58 @@
+name: CD
+
+on:
+  push:
+    branches: ["main"] # 메인 브랜치에 코드가 푸시될 때 이 워크플로우를 실행
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # 이 작업은 최신 Ubuntu 버전에서 실행됩니다.
+
+    strategy:
+      matrix:
+        node-version: [18.x] # Node.js 18.x 버전을 사용합니다.
+    steps:
+      - uses: actions/checkout@v3 # GitHub 저장소를 체크아웃하여 작업 디렉토리에 소스 코드를 가져옵니다.
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3 # Node.js를 설정합니다. 버전은 matrix에서 정의된 Node.js 버전을 사용합니다.
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm" # npm 캐시를 사용하여 의존성 설치 시간을 단축합니다.
+      # 환경변수 .env 파일 생성
+      - name: Generate Environment Variables File for .env
+        run: |
+          touch .env
+          echo "VITE_APP_KAKAOMAP_API_KEY=$VITE_APP_KAKAOMAP_API_KEY" >> .env
+          echo "VITE_APP_IMAGE_DOMAIN=$VITE_APP_IMAGE_DOMAIN" >> .env
+          echo "VITE_APP_TOSS_PAYMENTS_CLIENT_KEY=$VITE_APP_TOSS_PAYMENTS_CLIENT_KEY" >> .env
+          touch .env.production
+          echo "VITE_APP_API_ENDPOINT=$VITE_APP_API_ENDPOINT" >> .env.production
+        env:
+          VITE_APP_KAKAOMAP_API_KEY: ${{ secrets.VITE_APP_KAKAOMAP_API_KEY }}
+          VITE_APP_IMAGE_DOMAIN: ${{ secrets.VITE_APP_IMAGE_DOMAIN }}
+          VITE_APP_TOSS_PAYMENTS_CLIENT_KEY: ${{ secrets.VITE_APP_TOSS_PAYMENTS_CLIENT_KEY }}
+          VITE_APP_API_ENDPOINT: ${{ secrets.VITE_APP_API_ENDPOINT }}
+
+      # npm 패키지 설치
+      - name: Install dependencies
+        run: npm install
+
+      # 빌드 실행
+      - name: Build
+        run: npm run build
+
+      # AWS 자격증명 설정
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1 # AWS 자격증명을 설정
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # S3에 빌드 폴더 업로드
+      - name: S3 Deploy
+        run: aws s3 sync ./dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/ --acl bucket-owner-full-control # 빌드된 폴더를 S3 버킷에 동기화
+
+      # CloudFront 캐시 무효화
+      - name: Invalidate CloudFront Cache
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID }} --paths "/*" # CloudFront 배포의 캐시를 무효화하여 변경사항을 즉시 반영

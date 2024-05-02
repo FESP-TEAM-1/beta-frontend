@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import classNames from "classnames/bind";
+import { toast } from "react-toastify";
 import { InputField, InputFieldGroup, Button, Timer } from "@/components/common";
-import styles from "./Profile.module.css";
-import { checkPassword, checkPasswordMatch } from "@/utils";
-import { checkEmail } from "@/utils";
-
-const item = {
-  user_id: "test",
-  user_name: "홍길동",
-  user_email: "test@naver.com",
-  user_phone: "010-1234-5678",
-  user_birthdate: "1990-01-01",
-  user_gender: 1,
-  user_role: "user",
-};
+import { checkEmail, checkPassword, checkPasswordMatch } from "@/utils";
+import { ProfileBodyType } from "@/types";
+import { getMemberInfo, postSignup, putProfile } from "@/apis";
+import styles from "./ProfilePage.module.css";
+import { useResizeZoom } from "@/hooks";
 
 interface BirthdateGenderType {
   year: string;
@@ -29,7 +23,7 @@ interface idPasswordCheck {
 
 const cx = classNames.bind(styles);
 
-const Profile = () => {
+const ProfilePage = () => {
   const [password, setPassword] = useState<idPasswordCheck>({ value: "", isConfirm: false });
   const [matchPassword, setMatchPassword] = useState<idPasswordCheck>({ value: "", isConfirm: false });
   const [name, setName] = useState("");
@@ -41,34 +35,100 @@ const Profile = () => {
     gender: null,
   });
   const [email, setEmail] = useState({ email1: "", email2: "" });
-  const [isEmailSend, setIsEmailSend] = useState(false);
   const [emailCertValue, setEmailCertValue] = useState("");
-  const [time, setTime] = useState(180); // 3분
+  const [univEmail, setUnivEmail] = useState(""); // 학교 이메일
+  // const [univName, setUnivName] = useState(""); // 학교 이름
+
+  const [isEmailSend, setIsEmailSend] = useState(false);
+  const [showInputField, setShowInputField] = useState(true); // 인증번호 필드
+  const [isCodeCheck, setIsCodeCheck] = useState(false); // 인증번호 확인 여부
+  const [isStop, setIsStop] = useState(false); // 타이머 정지
+  const [reset, setReset] = useState(0); // 타이머 리셋
+
+  const { zoom } = useResizeZoom(600);
+
+  const { data, status, error } = useQuery({
+    queryKey: ["userProfile"],
+    queryFn: () => getMemberInfo(),
+  });
 
   useEffect(() => {
-    const [year, month, day] = item.user_birthdate.split("-");
-    const [phone1, phone2, phone3] = item.user_phone.split("-");
-    const [email1, email2] = item.user_email.split("@");
+    if (data) {
+      const [year, month, day] = data.birth_date.split("-");
+      const [phone1, phone2, phone3] = data.phone_number.split("-");
+      const [email1, email2] = data.user_email.split("@");
+      setName(data.user_name);
+      setPhone({ phone1, phone2, phone3 });
+      setBirthGender({ year, month, day, gender: data.gender === 1 ? "male" : "female" });
+      setEmail({ email1, email2 });
+      setUnivEmail(data.user_email);
+    }
+  }, [data]);
 
-    setName(item.user_name);
-    setPhone({ phone1, phone2, phone3 });
-    setBirthGender({ year, month, day, gender: item.user_gender === 1 ? "male" : "female" });
-    setEmail({ email1, email2 });
-  }, []);
+  if (status === "pending") return <>loading...</>;
+  if (status === "error") return <>{error.message}</>;
 
   // 제출
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({
-      타입: item.user_role,
-      아이디: item.user_id,
-      비밀번호: password.value,
-      이름: name,
-      전화번호: `${phone.phone1}-${phone.phone2}-${phone.phone3}`,
-      생년월일: `${birthGender.year}-${birthGender.month}-${birthGender.day}`,
-      성별: `${birthGender.gender === "male" ? 1 : 2}`,
-      이메일: `${email.email1}@${email.email2}`,
-    });
+
+    const fullEmail = `${email.email1}@${email.email2}`;
+    const phone_number = `${phone.phone1}-${phone.phone2}-${phone.phone3}`;
+    const birth_date = `${birthGender.year}-${birthGender.month}-${birthGender.day}`;
+    const gender = `${birthGender.gender === "male" ? "1" : "2"}`;
+
+    if (password.value && matchPassword.value) {
+      if (!password.isConfirm) {
+        toast.error("비밀번호는 8자 이상의 영문, 숫자, 특수문자를 사용해 주세요.");
+        return;
+      }
+
+      if (!matchPassword.isConfirm) {
+        toast.error("비밀번호가 일치하지 않습니다.");
+        return;
+      }
+    }
+
+    if (
+      name === data.user_name &&
+      fullEmail === data.user_email &&
+      phone_number === data.phone_number &&
+      birth_date === data.birth_date &&
+      gender === String(data.gender) &&
+      !matchPassword.value
+    ) {
+      toast.error("수정할 내용이 없습니다.");
+      return;
+    }
+
+    if (fullEmail !== data.user_email) {
+      if (!isEmailSend) {
+        toast.error("이메일 인증을 해주세요.");
+        return;
+      }
+      if (!isCodeCheck) {
+        toast.error("인증번호 확인을 해주세요.");
+        return;
+      }
+    }
+
+    const body: ProfileBodyType = {
+      user_name: name,
+      user_email: `${email.email1}@${email.email2}`,
+      login_pw: password.value,
+      birth_date,
+      gender,
+      phone_number,
+      user_role: data.user_role as "user" | "admin",
+    };
+
+    const { isSuccess, message } = await putProfile(`/api/updateMember`, body);
+    if (isSuccess) {
+      toast.success("회원정보 수정 완료");
+    } else {
+      toast.error(message);
+      return;
+    }
   };
 
   // 비밀번호
@@ -82,28 +142,85 @@ const Profile = () => {
   };
 
   // 이메일 전송
-  const handleSendEmail = () => {
+  const handleSendEmail = async () => {
     const fullEmail = `${email.email1}@${email.email2}`;
     if (checkEmail(fullEmail)) {
-      if (fullEmail !== item.user_email) {
-        // 인증번호 이메일 발송
-        console.log("이메일 전송");
-        setTime(180);
-        setIsEmailSend(true);
+      const toastId = toast.loading("이메일을 전송중입니다.");
+      if (fullEmail !== data.user_email) {
+        setIsCodeCheck(false);
+        setIsStop(false);
+        const body: { user_email: string } = { user_email: fullEmail };
+        const endPoint = `/api/send-email`;
+        const { isSuccess, message } = await postSignup(endPoint, body);
+        if (isSuccess) {
+          toast.update(toastId, {
+            render: "이메일 전송 완료 인증번호를 입력해주세요.",
+            type: toast.TYPE.SUCCESS,
+            isLoading: false,
+            autoClose: 2000,
+          });
+          setReset((prev) => prev + 1);
+          setIsEmailSend(true);
+          setShowInputField(true);
+        } else {
+          toast.update(toastId, {
+            render: message,
+            type: toast.TYPE.ERROR,
+            isLoading: false,
+            autoClose: 2000,
+          });
+          setIsEmailSend(false);
+          return;
+        }
+      } else {
+        toast.update(toastId, {
+          render: "현재 이메일과 동일합니다.",
+          type: toast.TYPE.ERROR,
+          isLoading: false,
+          autoClose: 2000,
+        });
+        return;
       }
     }
   };
 
   // 인증번호 확인
-  const handleCertConfirm = () => {
+  const handleCertConfirm = async () => {
     // 인증번호 확인
-    console.log("인증번호 확인");
+    const toastId = toast.loading("이메일을 전송중입니다.");
+    const fullEmail = `${email.email1}@${email.email2}`;
+    const body: { user_email: string; code: string } = { user_email: fullEmail, code: emailCertValue };
+    const endPoint = `/api/verify-code`;
+    const { isSuccess, message } = await postSignup(endPoint, body);
+    if (isSuccess) {
+      toast.update(toastId, {
+        render: "인증 완료",
+        type: toast.TYPE.SUCCESS,
+        isLoading: false,
+        autoClose: 2000,
+      });
+      setIsCodeCheck(true);
+      setIsStop(true);
+    } else {
+      toast.update(toastId, {
+        render: message,
+        type: toast.TYPE.ERROR,
+        isLoading: false,
+        autoClose: 2000,
+      });
+      return;
+    }
+  };
+
+  // 타이머 종료
+  const handleTimeEnd = () => {
+    setShowInputField(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles["profile-section-form"]}>
+    <form onSubmit={handleSubmit} className={styles["profile-section-form"]} style={{ zoom: zoom }}>
       <div className={styles["profile-section-form-group"]}>
-        <InputField required type="text" value={item.user_id} readOnly>
+        <InputField required type="text" value={data.login_id} readOnly>
           아이디
         </InputField>
       </div>
@@ -130,11 +247,25 @@ const Profile = () => {
       <InputField required type="text" placeholder="이름을 입력해주세요." value={name} onChange={(e) => setName(e.currentTarget.value)}>
         이름
       </InputField>
-      <div className={styles["profile-section-form-group"]}>
-        <InputFieldGroup required type="email" name="email" values={email} setValues={setEmail} userType={"user"} />
-        <Button onClick={handleSendEmail}>인증</Button>
-      </div>
-      {isEmailSend && time > 0 && (
+      {data.user_role === "user" ? (
+        <div className={styles["profile-section-form-group"]}>
+          <InputFieldGroup required type="email" name="email" values={email} setValues={setEmail} userType={"user"} />
+          <Button onClick={handleSendEmail}>인증</Button>
+        </div>
+      ) : (
+        <>
+          <InputField
+            type="text"
+            placeholder="abc@mail.hongik.ac.kr"
+            value={univEmail}
+            readOnly
+            onChange={(e) => setUnivEmail(e.currentTarget.value)}
+          >
+            학교 이메일
+          </InputField>
+        </>
+      )}
+      {data.user_role === "user" && isEmailSend && showInputField && (
         <div className={cx("profile-section-form-group", "top-minus10")}>
           <InputField
             required
@@ -147,8 +278,10 @@ const Profile = () => {
           >
             인증번호
           </InputField>
-          <Button onClick={handleCertConfirm}>확인</Button>
-          <Timer time={time} setTime={setTime} />
+          <Button onClick={handleCertConfirm} disabled={isCodeCheck}>
+            확인
+          </Button>
+          <Timer initialTime={180} isStop={isStop} reset={reset} onTimeEnd={handleTimeEnd} />
         </div>
       )}
       <InputFieldGroup required type="birthdate-gender" name="gender" values={birthGender} setValues={setBirthGender} />
@@ -161,4 +294,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;

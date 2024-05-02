@@ -10,6 +10,7 @@ import { SignupBodyType, ProfileBodyType } from "./signupBodyType";
 import { StoryResponseType, StoryType } from "./storyType";
 import { UserReservationFormType, UserReservationInputsType } from "./userReservationFormType";
 import { ResponseUserReservationInfoType, UserReservationInfoType } from "./userReservationInfoType";
+import { ErrorResponseType } from "./errorResponse";
 
 export {
   type ShowResponseType,
@@ -40,4 +41,5 @@ export {
   type ReviewPatchParamType,
   type ResponseUserReservationInfoType,
   type UserReservationInfoType,
+  type ErrorResponseType,
 };

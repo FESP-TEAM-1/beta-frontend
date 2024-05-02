@@ -8,7 +8,9 @@ import getShowReservationInfo from "./reservation/getShowReservationInfo";
 import getUserReservationList from "./reservation/getUserReservationList";
 import getAdminReservationList from "./reservation/getAdminReservationList";
 import getAdminReservationDetail from "./reservation/getAdminReservationDetail";
+import postPayVerification from "./reservation/postPayVerification";
 import postReservation from "./reservation/postReservation";
+import postTossConfirm from "./reservation/postTossConfirm";
 import deleteReservation from "./reservation/deleteReservation";
 
 import getReviewList from "./review/getReviewList";
@@ -47,7 +49,9 @@ export {
   getUserReservationList,
   getAdminReservationList,
   getAdminReservationDetail,
+  postPayVerification,
   postReservation,
+  postTossConfirm,
   deleteReservation,
   getReviewList,
   getUserReviewList,

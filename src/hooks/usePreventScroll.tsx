@@ -1,13 +1,15 @@
 import { useEffect } from "react";
-
-const usePreventScroll = () => {
+interface ParamType {
+  isModal: boolean;
+}
+const usePreventScroll = ({ isModal }: ParamType) => {
   const preventScroll = () => {
     const currentScrollY = window.scrollY;
     document.body.style.position = "fixed";
     document.body.style.width = "100%";
     document.body.style.top = `-${currentScrollY}px`;
     document.body.style.overflowY = "scroll";
-    document.body.classList.add("modal");
+    isModal && document.body.classList.add("modal");
     return currentScrollY;
   };
 
@@ -16,7 +18,7 @@ const usePreventScroll = () => {
     document.body.style.width = "";
     document.body.style.top = "";
     document.body.style.overflowY = "";
-    document.body.classList.remove("modal");
+    isModal && document.body.classList.remove("modal");
     window.scrollTo(0, prevScrollY);
   };
   useEffect(() => {

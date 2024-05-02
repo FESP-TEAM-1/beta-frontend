@@ -1,4 +1,55 @@
 .modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-color: #1a1a1a;
   box-sizing: border-box;
-  height: calc(100vh - 12.5rem);
+}
+
+.modal__logo {
+  margin: 3.125rem;
+}
+
+.modal__logo img {
+  width: 100px;
+}
+
+.modal__close {
+  cursor: pointer;
+  width: 4rem;
+  height: 4rem;
+  position: absolute;
+  top: 1.5625rem;
+  right: 1.5625rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(45deg);
+}
+.modal__close svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.modal__close svg line {
+  stroke: var(--gray100-color);
+}
+
+.modal__close:hover {
+  background-color: var(--gray400-color);
+}
+
+.carousel-wrapper {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 70vh;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 100%;
+  margin: 0;
+  padding: 0;
 }

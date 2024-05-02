@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "@/main";
+import { useQueryClient } from "@tanstack/react-query";
 import { useColor } from "color-thief-react";
 import { toast } from "react-toastify";
 import { Button, TagInput } from "@/components/common";
@@ -10,6 +10,7 @@ import { postStory } from "@/apis";
 import styles from "./StoryUploadModal.module.css";
 
 const StoryUploadModal = () => {
+  const queryClient = useQueryClient();
   const { setOpenModal } = useModalStore();
   const [objUrl, setObjUrl] = useState<string>("");
   const [tagsInput, setTagInputs] = useState<string[]>([]);
@@ -22,9 +23,9 @@ const StoryUploadModal = () => {
       setOpenModal({ state: false, type: "" });
       queryClient.invalidateQueries({ queryKey: ["storyData"] });
     },
-    onError: () => {
-      toast.error("스토리 업로드에 실패하였습니다. 다시 시도해주세요");
-    },
+    // onError: () => {
+    //   toast.error("스토리 업로드에 실패하였습니다. 다시 시도해주세요");
+    // },
   });
 
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {

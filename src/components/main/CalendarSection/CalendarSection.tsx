@@ -10,17 +10,20 @@ const CalendarSection = () => {
   const { todayString } = getTodayStringDate();
   const [filters, setFilters] = useState({ category: "concert", date: todayString });
 
+  const handleClickMoreButton = () => {
+    navigate(
+      `${filters.category}?location=all&start_date=${todayString}&end_date=${todayString}&progress=1&date=오늘${
+        filters.category === "concert" ? "&category=all" : ""
+      }`,
+    );
+  };
+
   return (
     <section className={styles.section}>
       <h2 className="a11y-hidden">공연/전시</h2> {/* 스포츠 */}
       <CalendarFilters filters={filters} setFilters={setFilters} />
       <CalendarList filters={filters} />
-      <Button
-        onClick={() => {
-          navigate(filters.category);
-        }}
-        reverseColor={true}
-      >
+      <Button onClick={handleClickMoreButton} reverseColor={true}>
         더보기
       </Button>
     </section>

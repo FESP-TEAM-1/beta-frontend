@@ -29,24 +29,25 @@ interface PropsType {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   type?: "submit";
+  loading?: boolean;
   borderRadius?: string;
   reverseColor?: boolean;
   form?: string;
   style?: React.CSSProperties;
 }
 
-const Button: React.FC<PropsType> = ({ children, onClick, disabled, type, borderRadius = "5px", reverseColor, form, style }) => {
+const Button: React.FC<PropsType> = ({ children, onClick, disabled, loading, type, borderRadius = "5px", reverseColor, form, style }) => {
   return (
     <>
       <button
-        className={cx("button", reverseColor && "white")}
+        className={cx("button", reverseColor && "white", loading && "loading")}
         onClick={onClick}
         disabled={disabled || false}
         type={type || "button"}
         style={{ borderRadius, ...style }}
         form={form}
       >
-        {children}
+        {!loading && <>{children}</>}
       </button>
     </>
   );

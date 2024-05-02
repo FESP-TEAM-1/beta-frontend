@@ -100,3 +100,22 @@
   background: url("@/assets/arrow.svg") no-repeat center / 2rem;
   transform: rotate(-180deg);
 }
+
+@media screen and (max-width: 768px) {
+  .date-select-container.show {
+    padding-left: 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .date-select-container.show {
+    padding-left: 0;
+    flex-wrap: wrap;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .date-input {
+    font-size: 0.775rem;
+  }
+}

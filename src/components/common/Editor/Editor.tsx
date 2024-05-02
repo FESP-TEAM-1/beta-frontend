@@ -10,6 +10,7 @@ import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 import Underline from "@ckeditor/ckeditor5-basic-styles/src/underline";
 import "./Editor.css";
+import { Controller, useFormContext } from "react-hook-form";
 
 const editorConfig = {
   plugins: [Essentials, Heading, Paragraph, Bold, Italic, Underline, Link, List, BlockQuote],
@@ -25,17 +26,23 @@ const editorConfig = {
 };
 
 interface PropsType {
-  editorData: string;
-  setEditorData: React.Dispatch<React.SetStateAction<string>>;
+  name: string;
 }
 
-const Editor: React.FC<PropsType> = ({ editorData, setEditorData }) => {
+const Editor: React.FC<PropsType> = ({ name }) => {
+  const { control, setValue } = useFormContext();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEditorChange = (_event: any, editor: ClassicEditor) => {
     const data = editor.getData();
-    setEditorData(data);
+    setValue(name, data);
   };
-  return <CKEditor editor={ClassicEditor} config={editorConfig} data={editorData} onBlur={handleEditorChange} />;
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { value } }) => <CKEditor editor={ClassicEditor} config={editorConfig} data={value} onBlur={handleEditorChange} />}
+    />
+  );
 };
 
 export default Editor;

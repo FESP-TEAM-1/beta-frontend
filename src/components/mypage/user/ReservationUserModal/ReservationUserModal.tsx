@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import LocationMap from "@/components/detail/InfoSection/LocationMap";
 import { deleteReservation } from "@/apis";
 import { useModalStore } from "@/stores";
-import { queryClient } from "@/main";
+import { useQueryClient } from "@tanstack/react-query";
 import styles from "./ReservationUserModal.module.css";
 
 type onCopyFn = (text: string) => void;
@@ -28,6 +28,7 @@ const convertBase64ToBytes = (base64: string): Uint8Array => {
 };
 
 const ReservationUserModal = ({ ...item }) => {
+  const queryClient = useQueryClient();
   const { setOpenModal } = useModalStore();
   const {
     show_times_id,

@@ -1,7 +1,8 @@
-import React, { SetStateAction } from "react";
+import React from "react";
 import { Button } from "@/components/common";
 import { useDaumPostcodePopup, Address } from "react-daum-postcode";
 import { AddressSearchResult } from "@/types";
+import { useFormContext } from "react-hook-form";
 
 const kakao = window.kakao;
 
@@ -54,20 +55,19 @@ const getLocation = (data: Address) => {
 };
 
 interface PropsType {
-  setPosition: React.Dispatch<SetStateAction<object>>;
-  setLocation: React.Dispatch<SetStateAction<string>>;
+  setPosition: React.Dispatch<React.SetStateAction<object>>;
 }
 
-const Postcode: React.FC<PropsType> = ({ setPosition, setLocation }) => {
+const Postcode: React.FC<PropsType> = ({ setPosition }) => {
+  const { setValue } = useFormContext();
   const open = useDaumPostcodePopup();
 
   const handleComplete = async (data: Address) => {
     try {
       const position = await getPosition(data);
-      console.log(position);
 
       if (position) {
-        setLocation(getLocation(data));
+        setValue("location", getLocation(data));
         setPosition(position);
       }
     } catch (e) {

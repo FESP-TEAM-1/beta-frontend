@@ -2,12 +2,10 @@ import { useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useReservationFormStore } from "@/stores";
+import { postTossConfirm } from "@/apis";
 import CheckBoxIconSrc from "@/assets/checkbox-payment.svg";
-import { postReservation } from "@/apis";
+import "@/styles/payment.css";
 
-interface ErrorType {
-  response: { data: { code: string; message: string } };
-}
 const PaySuccessPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -16,34 +14,16 @@ const PaySuccessPage = () => {
   const paymentKey = searchParams.get("paymentKey");
 
   const { reservationForm } = useReservationFormStore();
-
   useEffect(() => {
-    const requestData = {
-      orderId,
-      amount,
-      paymentKey,
-    };
-
-    const secretKey = import.meta.env.VITE_APP_TOSS_PAYMENTS_SECRET_KEY as string;
-    const encryptedSecretKey = `Basic ${btoa(secretKey + ":")}`;
-
     const confirm = async () => {
       try {
-        await axios.post("https://api.tosspayments.com/v1/payments/confirm", requestData, {
-          headers: {
-            Authorization: encryptedSecretKey,
-            "Content-Type": "application/json",
-          },
-        });
-
-        await postReservation({ orderId: orderId!, amount: amount!, ...reservationForm! });
+        await postTossConfirm({ orderId: orderId!, amount: amount!, paymentKey: paymentKey!, ...reservationForm! });
       } catch (err) {
-        if (err === "서버 요청 실패") {
-          // Todo 성공했던 결제 취소 및 navigate
-          return;
+        if (axios.isAxiosError(err)) {
+          const message = err.response?.data.message;
+          const status = err.response?.status;
+          navigate(`/payment/fail?code=${status}&message=${encodeURIComponent(message)}`);
         }
-        const { code, message } = (err as ErrorType).response.data;
-        navigate(`/payment/fail?code=${code}&message=${message}`);
       }
     };
     confirm();

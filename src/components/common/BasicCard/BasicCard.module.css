@@ -14,12 +14,6 @@
   margin-bottom: 1rem;
 }
 
-@media (max-width: 515px) {
-  .card__img-wrapper {
-    height: 17.5rem;
-  }
-}
-
 .card__img {
   height: 100%;
   object-fit: cover;
@@ -34,4 +28,10 @@
 .card__date {
   font-size: 0.8rem;
   color: var(--gray400-color);
+}
+
+@media (max-width: 515px) {
+  .card__img-wrapper {
+    height: 17.5rem;
+  }
 }

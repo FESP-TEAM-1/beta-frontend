@@ -12,9 +12,14 @@
   gap: 1rem;
 }
 
-.title {
+.title,
+.title-notice {
   margin-top: 1rem;
   color: var(--gray400-color);
+}
+
+.title-notice {
+  margin-bottom: 1rem;
 }
 
 .round-item {

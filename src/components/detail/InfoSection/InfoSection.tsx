@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { queryClient } from "@/main";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import LocationMap from "./LocationMap";
 import { ShowType } from "@/types";
@@ -19,6 +19,7 @@ const copyClipBoard: onCopyFn = async (text: string) => {
 };
 
 const InfoSection = () => {
+  const queryClient = useQueryClient();
   const { id: showId } = useParams();
   const {
     userState: { login_id },

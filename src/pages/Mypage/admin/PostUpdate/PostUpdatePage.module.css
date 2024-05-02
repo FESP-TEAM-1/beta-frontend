@@ -1,0 +1,15 @@
+.post-section-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.post-section-form > section > fieldset {
+  margin-top: 1.5rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}

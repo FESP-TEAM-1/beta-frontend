@@ -1,14 +1,19 @@
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   width: 100%;
+  height: 6.875rem;
+  background-color: white;
   padding: 2.25rem 0;
   box-sizing: border-box;
-  height: 6.875rem;
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--gray200-color);
 }
 
 .header-wrapper {
+  box-sizing: border-box;
   max-width: 60rem;
   width: calc(100% - 3.75rem);
   margin: 0 auto;
@@ -22,7 +27,6 @@
   flex-basis: 90px;
   flex-shrink: 0;
   align-items: center;
-  font-weight: bold;
   font-size: 1.875rem;
   color: var(--main-color);
 }
@@ -34,27 +38,12 @@
 }
 
 .button-group {
+  margin-left: auto;
   color: var(--gray400-color);
   font-weight: bold;
+  font-size: 0.75rem;
   display: flex;
   gap: 0.625rem;
-}
-
-.button-login,
-.button-logout,
-.button-mypage {
-  display: flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 0.625rem;
-  word-break: keep-all;
-  transition: background-color 0.3s;
-}
-
-.button-login:hover,
-.button-logout:hover,
-.button-mypage:hover {
-  background-color: var(--gray100-color);
 }
 
 .button-icon {
@@ -76,38 +65,49 @@
   height: 1.6rem;
 }
 
-.button-menu svg path {
+.menu svg path {
   stroke: var(--gray400-color);
 }
 
-/* 마이페이지 사이드NavBar */
-.mypage-navbar {
+/* 사이드NavBar */
+.side-navbar {
   display: none;
   position: absolute;
   top: 0;
   right: 0;
   width: 60%;
-  height: 100%;
-  z-index: 100;
+  height: 100dvh;
+  z-index: 200;
   background-color: white;
   padding: 1.25rem;
   box-sizing: border-box;
   animation: fadeIn 0.3s ease-in-out;
 }
 
-.mypage-navbar > nav {
-  margin-top: 1.25rem;
-  padding: 0.625rem;
+@media (max-width: 768px) {
+  .header-wrapper > nav,
+  .button-group button,
+  .button-group a {
+    display: none;
+  }
+
+  .side-navbar,
+  .button-group .menu {
+    display: block;
+  }
+
+  :global(.dim) {
+    display: block;
+  }
 }
 
-.mypage-navbar > .button-logout {
-  width: fit-content;
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-  color: var(--main-color);
-  font-size: 0.75rem;
-  font-weight: bold;
+@media (min-width: 769px) {
+  .menu {
+    display: none;
+  }
+  :global(.dim) {
+    display: none;
+  }
 }
 
 @keyframes fadeIn {
@@ -120,28 +120,5 @@
     display: block;
     transform: translateX(0);
     opacity: 1;
-  }
-}
-
-@media (min-width: 769px) {
-  .button-menu {
-    display: none;
-  }
-  :global(.dim) {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .button-logout.my-page {
-    display: none;
-  }
-
-  .mypage-navbar {
-    display: block;
-  }
-
-  :global(.dim) {
-    display: block;
   }
 }

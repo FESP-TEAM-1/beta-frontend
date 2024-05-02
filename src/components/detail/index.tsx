@@ -2,9 +2,7 @@ import SubMenuBar from "./SubMenuBar/SubMenuBar";
 import SubMenuBarSkeleton from "./SubMenuBar/SubMenuBarSkeleton";
 import SubMenuSection from "./SubMenuSection/SubMenuSection";
 import LikeButton from "./LikeButton/LikeButton";
-import InfoSection from "./InfoSection/InfoSection";
 import InfoSectionSkeleton from "./InfoSection/InfoSectionSkeleton";
-import ReviewSection from "./ReviewSection/ReviewSection";
 import ReviewSectionSkeleton from "./ReviewSection/ReviewSectionSkeleton";
 import ReviewForm from "./ReviewForm/ReviewForm";
 import ReviewItem from "./ReviewItem/ReviewItem";
@@ -22,9 +20,7 @@ export {
   SubMenuBarSkeleton,
   SubMenuSection,
   LikeButton,
-  InfoSection,
   InfoSectionSkeleton,
-  ReviewSection,
   ReviewSectionSkeleton,
   ReviewForm,
   ReviewItem,

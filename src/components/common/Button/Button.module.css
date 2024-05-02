@@ -34,3 +34,23 @@
   background-color: var(--gray200-color);
   border: none;
 }
+
+.loading::after {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border: 5px solid var(--gray400-color);
+  border-radius: 50%;
+  border-top: 5px solid var(--gray200-color);
+  animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -23,3 +23,26 @@
   text-align: left;
   line-height: 1.875rem;
 }
+
+.dummy-image {
+  background-color: var(--gray100-color);
+  aspect-ratio: 3/4;
+  max-height: 30rem;
+
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.dummy-image svg {
+  width: 40%;
+  display: block;
+}
+
+.dummy-image p {
+  text-align: center;
+  color: var(--main-color);
+  font-weight: bold;
+}

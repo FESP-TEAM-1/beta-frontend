@@ -1,0 +1,15 @@
+.side-navbar > nav {
+  margin-top: 1.25rem;
+  padding: 0.625rem;
+}
+
+.button-group {
+  position: absolute;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  gap: 0.625rem;
+  color: var(--gray400-color);
+  font-weight: bold;
+  font-size: 0.75rem;
+}

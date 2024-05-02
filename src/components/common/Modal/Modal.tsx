@@ -4,7 +4,6 @@ import { useModalStore } from "@/stores";
 import { usePreventScroll } from "@/hooks";
 import classNames from "classnames/bind";
 import styles from "./Modal.module.css";
-import { queryClient } from "@/main";
 
 const cx = classNames.bind(styles);
 
@@ -17,17 +16,14 @@ interface PropsType {
 }
 
 const Modal: React.FC<PropsType> = ({ children, width, height, title, titleHidden = false }) => {
-  const { openModal, setOpenModal } = useModalStore();
+  const { setOpenModal } = useModalStore();
 
-  usePreventScroll();
+  usePreventScroll({ isModal: true });
 
   const closeModal = (e: React.MouseEvent) => {
     const targetClassName = (e.target as HTMLElement).className;
 
     if (targetClassName.includes("modal-background") || targetClassName.includes("modal__close")) {
-      if (openModal.type === "reivewManage") {
-        queryClient.fetchQuery({ queryKey: ["showList"] });
-      }
       setOpenModal({ state: false, type: "" });
     }
   };

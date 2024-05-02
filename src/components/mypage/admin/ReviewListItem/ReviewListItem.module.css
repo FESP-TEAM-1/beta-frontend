@@ -1,0 +1,29 @@
+.review-contents {
+  padding: 1.5rem 1.875rem 2rem 1.875rem;
+  border: 1px solid var(--gray100-color);
+  border-radius: 10px;
+  position: relative;
+  flex-grow: 1;
+}
+
+.review__nickname {
+  display: block;
+  margin-bottom: 0.625rem;
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.review__content {
+  font-size: 0.875rem;
+  color: var(--gray400-color);
+  word-break: break-all;
+}
+
+.review__date {
+  position: absolute;
+  bottom: 0.8rem;
+  right: 1.875rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--gray300-color);
+}

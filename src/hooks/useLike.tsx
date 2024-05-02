@@ -1,10 +1,11 @@
-import { queryClient } from "@/main";
+import { useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useLoginStore } from "@/stores";
 import { deleteLike, postLike } from "@/apis";
 import { ShowType } from "@/types";
 
 const useLike = (showId: string) => {
+  const queryClient = useQueryClient();
   const {
     userState: { login_id },
   } = useLoginStore();

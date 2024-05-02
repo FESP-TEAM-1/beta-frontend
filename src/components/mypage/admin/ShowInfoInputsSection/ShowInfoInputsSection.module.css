@@ -1,0 +1,55 @@
+.title {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.l_date {
+  display: grid;
+  grid-template-areas: "a b c";
+  gap: 1rem;
+}
+@media (max-width: 420px) {
+  .l_date {
+    flex-direction: column;
+    grid-template-areas:
+      "a b"
+      "c c";
+  }
+}
+
+.l_address {
+  display: flex;
+  gap: 1rem;
+}
+
+@media (max-width: 440px) {
+  .l_address {
+    flex-wrap: wrap;
+  }
+}
+
+.l_address fieldset {
+  flex-grow: 4;
+}
+
+.l_address button {
+  flex-grow: 1;
+  flex-basis: 100px;
+  flex-shrink: 0;
+}
+
+.tags-section :global(.tags-input) {
+  width: 100%;
+}
+.tags-section :global(.tagify__tag) {
+  max-width: calc(100% - 10px);
+}
+.tags-section :global(.tagify__tag > div::before) {
+  --tag-inset-shadow-size: 10rem;
+}
+.tags-section :global(.tagify__tag-text) {
+  word-break: break-all;
+}
+.tags-section :global(.tagify__tag__removeBtn) {
+  flex-shrink: 0;
+}

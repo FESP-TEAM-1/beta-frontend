@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { queryClient } from "@/main";
+import { useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/common";
 import { ReviewPostParamType } from "@/types";
@@ -8,6 +8,7 @@ import { postReview } from "@/apis";
 import styles from "./ReviewForm.module.css";
 
 const ReviewForm = () => {
+  const queryClient = useQueryClient();
   const { id: show_id } = useParams();
   const [reviewInput, setReviewInput] = useState("");
   const { mutate } = useMutation({
